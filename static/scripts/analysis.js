@@ -1,4 +1,4 @@
-let ctx = document.getElementById('myChart').getContext('2d');
+let ctx = document.getElementById('income-chart').getContext('2d');
 let chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'line',
