@@ -55,7 +55,9 @@
     </form>
     <ul>
     {% for post in posts %}
-        
+        <h4>{{ post.date }} by User</h4>
+        <h6>{{ post.post }}</h6>
+        <p>{{ post.category }}</p>
     {% endfor %}
     </ul>
 </div>

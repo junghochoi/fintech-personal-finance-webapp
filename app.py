@@ -5,6 +5,7 @@ from flask import request
 from flask import redirect, url_for
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
+from datetime import datetime
 
 app = Flask(__name__)
 load_dotenv()
@@ -22,19 +23,20 @@ def index():
 @app.route('/home')
 def home():
     collection = mongo.db.posts
-    posts = collection.find({}).sort('date')
+    posts = collection.find({}).sort("date")
     return render_template("homepage.html", posts=posts)
 
 @app.route('/home/add-post', methods=["GET", "POST"])
 def add_post():
     if request.method == "GET":
-        retu
-        return redirect(url_for("homepage.html"))
+        # return redirect(url_for("homepage.html"))
+        return render_template("homepage.html")
     else:
         posts = mongo.db.posts
-        posts.insert({"post": request.form["post-message"], "category": request.form["post-category"]})
+        posts.insert({ "date": datetime.now(), "post": request.form["post-message"], "category": request.form["post-category"] })
+        posts = posts.find({}).sort("date")
         # return redirect(url_for("homepage.html"))
-        return render_template("template.html", music=music)
+        return render_template("homepage.html", posts=posts)
 
 @app.route('/analysis')
 def analysis():
