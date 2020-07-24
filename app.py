@@ -6,6 +6,7 @@ from flask import redirect, url_for
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 from datetime import datetime
+import dummydata
 
 app = Flask(__name__)
 load_dotenv()
@@ -38,6 +39,39 @@ def add_post():
         # return redirect(url_for("homepage.html"))
         return render_template("homepage.html", posts=posts)
 
-@app.route('/analysis')
+@app.route('/analysis', methods=["GET"])
 def analysis():
+
+    # Some how get the list of transactions
     return render_template("analysis.html")
+
+
+
+
+
+
+
+# AJAX Calls to server
+@app.route("/analysis/balance")
+def balance_info():
+    # Replace this with some database stuff to get the user transactions.
+    # User_transactions should look something similar to what is in dummydata
+    # TODO: Discuss about database. Create Database.
+    user_transactions = dummydata.transactions
+
+    user_transactions.sort(key = lambda x : datetime.strptime(x["date"], "%Y/%m/%d"))
+
+    return {
+        "initialBalance": 300,
+        "data": user_transactions    
+    }
+
+
+@app.route("/analysis/categories")
+def categories_info():
+    return dummydata.categories
+
+
+
+    
+
