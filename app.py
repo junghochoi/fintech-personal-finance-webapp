@@ -70,6 +70,18 @@ def balance_info():
 
 @app.route("/analysis/categories")
 def categories_info():
+
+    # we just need to return something like this 
+    '''
+    categories = {
+        "eating out": 200,
+        "car/transportation": 300,
+        "housing": 4000,
+        "entertainment": 10,
+        "groceries": 80,
+        "uncategorized": 1000
+    }
+    '''
     return dummydata.categories
 
 
