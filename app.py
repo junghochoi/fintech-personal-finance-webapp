@@ -8,6 +8,7 @@ import bcrypt
 
 app = Flask(__name__)
 load_dotenv()
+app.secret_key = os.getenv("KEY")
 
 app.config['MONGO_DBNAME'] = 'ftf-final'
 app.config['MONGO_URI'] = os.getenv("MONGO_URI")
@@ -57,18 +58,50 @@ def learn():
     AUTHENTICATION ROUTES
 '''
 
-@app.route("/signup")
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
-    return render_template("signup.html")
+    session.clear()
+    if request.method == 'GET':
+        return render_template('signup.html')
+    else:
+        username = request.form["username"]
+        password = request.form["password"]
+
+        collection = mongo.db.users
+        user = list(collection.find({"username": username}))
+        if len(user) == 0:
+            collection.insert_one({"username": username, "password": str(bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()), 'utf-8')})
+            session["username"] = username
+            # return redirect(url_for('homepage'))
+            return render_template("homepage.html")
+        else:
+            return render_template('signup.html', msg="Username already taken. Choose another one or login.")
 
 
 @app.route("/login", methods= ["GET", "POST"])
 def login():
+    session.clear()
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        username = request.form["username"]
+        password = request.form["password"]
 
+        collection = mongo.db.users
+        user = list(collection.find({"username": username}))
+        if len(user) == 0:
+            return render_template('login.html', msg="Invalid username. Please create an account.")
+        elif bcrypt.hashpw(password.encode('utf-8'), user[0]['password'].encode('utf-8')) == user[0]['password'].encode('utf-8'):
+            session["username"] = username
+            # return redirect(url_for('homepage'))
+            return render_template("homepage.html")
+        else:
+            return render_template('login.html', msg="Invalid password.")
 
-    return render_template("login.html")
-
-
+@app.route('/logout', methods=["GET"]) 
+def logout():
+    session.clear()
+    return render_template("index.html")
 
 
 
