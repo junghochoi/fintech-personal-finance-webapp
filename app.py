@@ -44,6 +44,12 @@ def analysis():
     return render_template("analysis.html")
 
 
+@app.route('/learn', methods=["GET"])
+def learn():
+
+
+    return render_template("learning.html")
+
 
 
 
@@ -56,7 +62,6 @@ def balance_info():
     # User_transactions should look something similar to what is in dummydata
     # TODO: Discuss about database. Create Database.
     user_transactions = dummydata.transactions
-
     user_transactions.sort(key = lambda x : datetime.strptime(x["date"], "%Y/%m/%d"))
 
     return {
@@ -69,6 +74,12 @@ def balance_info():
 def categories_info():
 
     # we just need to return something like this 
+
+
+
+
+
+
     '''
     categories = {
         "eating out": 200,
