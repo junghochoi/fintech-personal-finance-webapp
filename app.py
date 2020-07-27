@@ -91,7 +91,7 @@ def login():
         user = list(collection.find({"username": username}))
         if len(user) == 0:
             return render_template('login.html', msg="Invalid username. Please create an account.")
-        elif bcrypt.hashpw(password.encode('utf-8'), user[0]['password'].encode('utf-8')) == user[0]['password'].encode('utf-8'):
+        elif bcrypt.hashpw(password.encode("utf-8"), user[0]["password"].encode("utf-8")):
             session["username"] = username
             # return redirect(url_for('homepage'))
             return render_template("homepage.html")
