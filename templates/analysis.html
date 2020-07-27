@@ -1,38 +1,56 @@
 {% extends "layout.html" %}
 {% block content %}
-  
 
-<h1>Analysis</h1>
+
+<h1>Transactions</h1>
 <div class="container">
-  <div class="row">
-    <div class="col-12">
-      <canvas id="income-chart" ></canvas>
+	<div class="row">
+		<div class="col-12">
+			<canvas id="income-chart"></canvas>
+		</div>
+	</div>
+
+	<!-- TODO: FIXI THIS BR THING -->
+
+	<div class="tr-table-graph">
+        <div class="col-6">
+            <!-- Div of cards -->
+            <button type="button" class="btn btn-primary">+</button>
+            {% for transaction in transactions %}
+            {% set currentDate = ((post.date)|string).split(' ') %}
+            <h6>{{ currentDate[0] }} by User</h6>
+            <h4>{{ post.post }}</h4>
+            <p>{{ post.category }}</p>
+            {% endfor %}
+        </div>
+        <div class="col-6">
+            <!-- Graphs -->
+        </div>
     </div>
-  </div>
+    <div class="row">
+		<div class="col-12 col-lg-6">
+			<canvas id="categories-barchart"></canvas>
+		</div>
 
-  <!-- TODO: FIXI THIS BR THING -->
+		<div class="col-12 col-lg-6">
+			<canvas id="categories-piechart"></canvas>
+		</div>
 
-  <div class="row">
-    <div class="col-12 col-lg-6">
-      <canvas id="categories-barchart"></canvas>
-    </div>
 
-    <div class="col-12 col-lg-6">
-      <canvas id="categories-piechart"></canvas>
-    </div>
 
-    
+	</div>
 
-  </div>
 
-  
 
-  <button id="update">Update</button>
+	<button id="update">Update</button>
 </div>
 
 
 <!-- Find a fix for this . reloading jquery twice-->
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script src="../static/scripts/analysis.js"></script>
 

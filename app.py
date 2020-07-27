@@ -1,12 +1,10 @@
 import os
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 from datetime import datetime
 import dummydata
+import bcrypt
 
 app = Flask(__name__)
 load_dotenv()
@@ -25,7 +23,7 @@ def index():
 def home():
     collection = mongo.db.posts
     posts = collection.find({}).sort("date", -1)
-    return render_template("homepage.html", posts=posts)
+    return render_template("homepage.html", posts=posts, title="Home")
 
 @app.route('/home/add-post', methods=["GET", "POST"])
 def add_post():
@@ -39,7 +37,7 @@ def add_post():
         # return redirect(url_for("homepage.html"))
         return render_template("homepage.html", posts=posts)
 
-@app.route('/analysis', methods=["GET"])
+@app.route('/transactions', methods=["GET"])
 def analysis():
 
     # Some how get the list of transactions
