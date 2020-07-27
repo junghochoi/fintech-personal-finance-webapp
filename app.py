@@ -24,7 +24,7 @@ def index():
 @app.route('/home')
 def home():
     collection = mongo.db.posts
-    posts = collection.find({}).sort("date")
+    posts = collection.find({}).sort("date", -1)
     return render_template("homepage.html", posts=posts)
 
 @app.route('/home/add-post', methods=["GET", "POST"])
@@ -35,7 +35,7 @@ def add_post():
     else:
         posts = mongo.db.posts
         posts.insert({ "date": datetime.now(), "post": request.form["post-message"], "category": request.form["post-category"] })
-        posts = posts.find({}).sort("date")
+        posts = posts.find({}).sort("date", -1)
         # return redirect(url_for("homepage.html"))
         return render_template("homepage.html", posts=posts)
 

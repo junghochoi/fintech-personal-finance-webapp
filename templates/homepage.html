@@ -38,7 +38,7 @@
     <form method="POST" action="/home/add-post">
         <div class="row">
             <div class="col-5">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="post-message" value="" placeholder="Create a post..." class="form-control"></textarea>
+                <input type="text" name="post-title" value="" placeholder="Title" class="form-control"></input>
             </div>
             <div class="col-3">
                 <select class="form-control" id="exampleFormControlSelect1" name="post-category" value="">
@@ -50,13 +50,17 @@
                     <option>Other</option>
                 </select>
             </div>
+            <div class="col-5">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="post-message" value="" placeholder="Create a post..." class="form-control"></textarea>
+            </div>
         </div>
         <input type="submit" value="Post" class="btn btn-primary">
     </form>
     <ul>
     {% for post in posts %}
-        <h4>{{ post.date }} by User</h4>
-        <h6>{{ post.post }}</h6>
+        {% set currentDate = ((post.date)|string).split(' ') %}
+        <h6>{{ currentDate[0] }} by User</h6>
+        <h4>{{ post.post }}</h4>
         <p>{{ post.category }}</p>
     {% endfor %}
     </ul>
