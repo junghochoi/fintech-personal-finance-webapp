@@ -28,7 +28,8 @@ $.ajax({
                     return 'Name: ' + names[tooltipItems[0].index] + '\nDate: ' + dates[tooltipItems[0].index];
                 }
             }
-        }
+        },
+        pointHitRadius: 5
 
     }
 
