@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="container">
+    <h1>Signup</h1>
+    <form method="POST" action="/loginsignup">
+        <label for="username">User Name:</label>
+        <input type="text" name="username" value="">
+        <label for="password">Password:</label>
+        <input type="password" name="password" value="">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}
