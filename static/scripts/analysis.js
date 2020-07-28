@@ -1,15 +1,23 @@
+console.log("connected")
+
 $.ajax({
     url: "/analysis/balance"
 }).done((data)=>{
     
-    
-    let transactions = data['data'];
-    let dates = transactions.map(t => t.date);
-    let names = transactions.map(t => t.name)
-    let balances = transactions.map(b => b.result);
 
+    let transactions = data['data'];
+    
+    let dates = transactions.map(t => t.date);
+    let names = transactions.map(t => t.title)
+    let balances = transactions.map(t => t.result);
+    let notes = transactions.map(t => t.notes);
+    let change = transactions.map(t=> t.amount);
+    let categories = transactions.map(t=>t.category)
+    console.log(dates);
+    console.log(names);
+    console.log(balances);
     userData =  {
-        labels: names,
+        labels: dates,
         datasets: [{
             label: 'Balance',
             backgroundColor: 'rgb(255, 99, 132)',
@@ -21,15 +29,31 @@ $.ajax({
     config = {
         responsive: true,
         tooltips: {
+            titleFontSize: 14,
+            titleSpacing: 4,
             enabled: true,
             mode: 'single',
             callbacks:{
                 title: function(tooltipItems, data){
-                    return 'Name: ' + names[tooltipItems[0].index] + '\nDate: ' + dates[tooltipItems[0].index];
+
+                    return `Name: ${names[tooltipItems[0].index]}\nChange: ${change[tooltipItems[0].index]}\nDate: ${dates[tooltipItems[0].index]}\nCategory: ${categories[tooltipItems[0].index]}\nNotes: ${notes[tooltipItems[0].index]}`
+           
                 }
             }
         },
-        pointHitRadius: 5
+        elements: {
+            line: {
+                tension: 0
+            }
+        },
+        pointHitRadius: 5,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
 
     }
 
@@ -65,7 +89,7 @@ $.ajax({
     barData = {
         labels: categories,
         datasets:[{
-            label: 'Amount Spent',
+            
             data: expenses,
 
 
@@ -91,8 +115,12 @@ $.ajax({
 
 
     barOptions = {
+        title:{
+            display: true,
+            text: 'Total Expenses'
+        },
         scales: {
-            yAxes: [{
+            xAxes: [{
                 ticks: {
                     beginAtZero: true
                 }
