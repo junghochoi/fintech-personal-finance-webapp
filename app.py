@@ -64,49 +64,50 @@ def add_post():
 
 
 @app.route('/transactions', methods=["GET"])
-def analysis():
+def transactions():
     if not session:
         return redirect(url_for('login'))
 
     # Some how get the list of transactions
+    user_collection = mongo.db.users
+    user = user_collection.find_one({'username': session['username']})
+    print(user['transactions'])
     return render_template("analysis.html")
 
-@app.route('/transactions/add-transaction', methods=["GET", "POST"])
+@app.route('/transactions/add-transaction', methods=["POST"])
 def add_transactions():
-    if request.method == "GET":
-        # return redirect(url_for("homepage.html"))
-        return render_template("analysis.html")
-    else:
-        user_collection = mongo.db.users
 
-        logged_in_username = session['username']
-        user = user_collection.find_one({"username" :logged_in_username})
+    if not session:
+        redirect(url_for('login'))
+    user_collection = mongo.db.users
 
-        title = request.form["trans-title"]
-        amount = request.form["trans-amount"]
-        category = request.form["trans-category"]
-        notes = request.form["trans-message"]
-        date = datetime.now()
+    logged_in_username = session['username']
+    user = user_collection.find_one({"username" :logged_in_username})
 
-        transaction = {
-            "title": title,
-            "amount": amount,
-            "category" : category,
-            "date" : date,
-            "notes": notes
-        }
+    title = request.form["trans-title"]
+    amount = request.form["trans-amount"]
+    category = request.form["trans-category"]
+    notes = request.form["trans-message"]
+    date = datetime.now()
+
+    transaction = {
+        "title": title,
+        "amount": amount,
+        "category" : category,
+        "date" : date,
+        "notes": notes
+    }
+
+    user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
+
+
     
-        user["transactions"].append(transaction)
 
-        transactions = user["transactions"]
-
-        # return redirect(url_for("home"))
-        return render_template("analysis.html", transactions=transactions)
+    return redirect(url_for("transactions"))
+    # return render_template("analysis.html", transactions=transactions)
 
 @app.route('/learn', methods=["GET"])
 def learn():
-
-
     return render_template("learning.html")
 
 
@@ -181,6 +182,13 @@ def balance_info():
     # Replace this with some database stuff to get the user transactions.
     # User_transactions should look something similar to what is in dummydata
     # TODO: Discuss about database. Create Database.
+
+    user_collection = mongo.db.users
+    user = user_collection.find_one({"username" : session['username']})
+
+    # print(user['transactions'])
+
+
     user_transactions = dummydata.transactions
     user_transactions.sort(key = lambda x : datetime.strptime(x["date"], "%Y/%m/%d"))
 
