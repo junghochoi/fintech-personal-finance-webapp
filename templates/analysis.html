@@ -5,7 +5,35 @@
 <div class="container">
 	<div class="row">
 		<div class="col-12">
-			<canvas id="income-chart"></canvas>
+            <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="overview" href="#" onclick="loadOverview()">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="2" onclick="load2()">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="3" onclick="load3()">Link</a>
+                    </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="charts" id="overview-chart">    
+                        <h3>Overview</h3>
+                        <canvas id="income-chart"></canvas>
+                    </div>
+                    <div class="charts hidden" id="2-chart">  
+                        <h3>2</h3>  
+                        <canvas id="income-chart"></canvas>
+                    </div>
+                    <div class="charts hidden" id="3-chart">    
+                        <h3>3</h3>
+                        <canvas id="income-chart"></canvas>
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 
@@ -13,6 +41,7 @@
 
     <div class="row">
         <div class="col-6">
+
             <!-- Div of cards -->
             <input type="button" class="btn btn-primary" id="open-btn" onclick="toggleForm()" value="+"></input>
             <div class="hidden" id="transaction-form">
@@ -108,6 +137,28 @@
                 $("#open-btn").val("+");
             }
             
+        }
+
+        function loadOverview() {
+            $('.nav-link').removeClass("active");
+            $('.charts').removeClass("visible").addClass("hidden");
+            $('#overview-chart').removeClass("hidden").addClass("visible");
+            $('#overview').addClass("active");
+        }
+
+        
+        function load2() {
+            $('.nav-link').removeClass("active");
+            $('.charts').removeClass("visible").addClass("hidden");
+            $('#2-chart').removeClass("hidden").addClass("visible");
+            $('#2').addClass("active");
+        }
+
+        function load3() {
+            $('.nav-link').removeClass("active");
+            $('.charts').removeClass("visible").addClass("hidden");
+            $('#3-chart').removeClass("hidden").addClass("visible");
+            $('#3').addClass("active");
         }
     </script>
 

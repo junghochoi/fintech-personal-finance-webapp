@@ -77,6 +77,7 @@ def add_transactions():
 
     if not session:
         redirect(url_for('login'))
+
     user_collection = mongo.db.users
 
     logged_in_username = session['username']
@@ -101,11 +102,16 @@ def add_transactions():
         "notes": notes
     }
 
+    # if main_category == "spending" {
+        
+    # }
+
     user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
     transactions = user["transactions"][::-1]
 
     # return redirect(url_for("transactions"))
     return render_template("analysis.html", transactions=transactions)
+    # return redirect(f"https://0.0.0.0:5000{url_for('transactions')}")
 
 @app.route('/learn', methods=["GET"])
 def learn():
@@ -136,7 +142,9 @@ def signup():
                 "password": str(bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()), 'utf-8'),
                 "posts" : [],
                 "transactions": [],
-                "currentBalance" : 0
+                "currentBalance" : 0,
+                "totalSpending": 0,
+                "totalEarnings": 0
             })
             session["username"] = username
             # return redirect(url_for('homepage'))
