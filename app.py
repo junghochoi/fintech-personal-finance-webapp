@@ -32,11 +32,35 @@ def add_post():
         # return redirect(url_for("homepage.html"))
         return render_template("homepage.html")
     else:
-        posts = mongo.db.posts
-        posts.insert({ "date": datetime.now(), "post": request.form["post-message"], "category": request.form["post-category"] })
-        posts = posts.find({}).sort("date", -1)
-        # return redirect(url_for("homepage.html"))
-        return render_template("homepage.html", posts=posts)
+      
+        user_collection = mongo.db.users
+        post_collection = mongo.db.posts
+
+        logged_in_username = session['username']
+        user = user_collection.find_one({"username" :logged_in_username})
+
+        message = request.form["post-message"]
+        category= request.form["post-category"]
+        date = datetime.now()
+
+        post = {
+            "message" : message,
+            "category" : category,
+            "date" : date,
+            "author" : logged_in_username
+        }
+    
+        user["posts"].append(post)
+        post_collection.insert(post)
+
+        posts = post_collection.find({}).sort("date", -1)
+
+
+        return redirect(url_for("home"))
+        # return render_template("homepage.html", posts=posts)
+
+
+
 
 @app.route('/transactions', methods=["GET"])
 def analysis():
@@ -70,7 +94,13 @@ def signup():
         collection = mongo.db.users
         user = list(collection.find({"username": username}))
         if len(user) == 0:
-            collection.insert_one({"username": username, "password": str(bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()), 'utf-8')})
+            collection.insert_one({
+                "username": username, 
+                "password": str(bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()), 'utf-8'),
+                "posts" : [],
+                "transactions": [],
+                "currentBalance" : 0
+            })
             session["username"] = username
             # return redirect(url_for('homepage'))
             return render_template("homepage.html")
@@ -80,7 +110,7 @@ def signup():
 
 @app.route("/login", methods= ["GET", "POST"])
 def login():
-    session.clear()
+    
     if request.method == 'GET':
         return render_template('login.html')
     else:
@@ -93,14 +123,15 @@ def login():
             return render_template('login.html', msg="Invalid username. Please create an account.")
         elif bcrypt.hashpw(password.encode("utf-8"), user[0]["password"].encode("utf-8")):
             session["username"] = username
-            # return redirect(url_for('homepage'))
-            return render_template("homepage.html")
+            return redirect(url_for('home'))
+            # return render_template("homepage.html")
         else:
             return render_template('login.html', msg="Invalid password.")
 
 @app.route('/logout', methods=["GET"]) 
 def logout():
     session.clear()
+    return redirect(url_for('home'))
     return render_template("index.html")
 
 
