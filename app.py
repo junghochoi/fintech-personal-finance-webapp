@@ -56,7 +56,6 @@ def add_post():
 
     posts = post_collection.find({}).sort("date", -1)
 
-
     return redirect(url_for("home"))
     # return render_template("homepage.html", posts=posts)
 
