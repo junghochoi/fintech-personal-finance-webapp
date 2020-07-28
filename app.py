@@ -4,7 +4,7 @@ from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 from datetime import datetime
 import dummydata
-import bcrypt 
+import bcrypt
 
 app = Flask(__name__)
 load_dotenv()
@@ -67,11 +67,10 @@ def transactions():
     if not session:
         return redirect(url_for('login'))
 
-    # Some how get the list of transactions
     user_collection = mongo.db.users
     user = user_collection.find_one({'username': session['username']})
-    print(user['transactions'])
-    return render_template("analysis.html")
+    transactions = user["transactions"][::-1]
+    return render_template("analysis.html", transactions=transactions)
 
 @app.route('/transactions/add-transaction', methods=["POST"])
 def add_transactions():
@@ -85,25 +84,28 @@ def add_transactions():
 
     title = request.form["trans-title"]
     amount = request.form["trans-amount"]
-    category = request.form["trans-category"]
+
+    details = request.form["trans-category"].split(",")
+    main_category = details[0]
+    spec_category = details[1]
+
     notes = request.form["trans-message"]
     date = datetime.now()
 
     transaction = {
         "title": title,
         "amount": amount,
-        "category" : category,
+        "main_category" : main_category,
+        "spec_category": spec_category,
         "date" : date,
         "notes": notes
     }
 
     user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
+    transactions = user["transactions"][::-1]
 
-
-    
-
-    return redirect(url_for("transactions"))
-    # return render_template("analysis.html", transactions=transactions)
+    # return redirect(url_for("transactions"))
+    return render_template("analysis.html", transactions=transactions)
 
 @app.route('/learn', methods=["GET"])
 def learn():
@@ -146,7 +148,8 @@ def signup():
 @app.route("/login", methods= ["GET", "POST"])
 def login():
     if session:
-        return redirect(url_for('home'))
+        # return redirect(url_for('home'))
+        return render_template('analysis.html')
     if request.method == 'GET':
         return render_template('login.html')
     else:
