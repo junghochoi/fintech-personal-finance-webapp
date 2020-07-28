@@ -16,12 +16,40 @@
         <div class="col-6">
             <!-- Div of cards -->
             <button type="button" class="btn btn-primary">+</button>
-            {% for transaction in transactions %}
+            <form method="POST" action="/transactions/add-transaction">
+				<div class="row">
+					<div class="col-12">
+						<input type="text" name="trans-title" value="" placeholder="Title" class="form-control"></input>
+					</div>
+                    <div class="col-4">
+                        <input type="number" name="trans-amount" value="" placeholder="$0.00" step="0.01" class="form-control"></input>
+                    </div>
+					<div class="col-8">
+						<select class="form-control" id="exampleFormControlSelect1" name="trans-category" value="">
+                            <option selected>Select a category...</option>
+                            <option>Housing & Utilities</option>
+                            <option>Transportation</option>
+                            <option>Food</option>
+                            <option>Clothing</option>
+                            <option>Education</option>
+                            <option>Entertainment</option>
+                            <option>Other</option>
+                        </select>
+					</div>
+					<div class="col-12">
+						<textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="trans-message" value="" placeholder="Notes..." class="form-control"></textarea>
+					</div>
+                    <div class="col-5">
+				        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+				</div>
+			    </form>
+            <!-- {% for transaction in transactions %}
             {% set currentDate = ((post.date)|string).split(' ') %}
             <h6>{{ currentDate[0] }} by User</h6>
             <h4>{{ post.post }}</h4>
             <p>{{ post.category }}</p>
-            {% endfor %}
+            {% endfor %} -->
         </div>
         <div class="col-6">
             <!-- Graphs -->

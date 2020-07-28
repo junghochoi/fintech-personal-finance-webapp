@@ -4,7 +4,7 @@ from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 from datetime import datetime
 import dummydata
-import bcrypt
+import bcrypt 
 
 app = Flask(__name__)
 load_dotenv()
@@ -68,6 +68,37 @@ def analysis():
     # Some how get the list of transactions
     return render_template("analysis.html")
 
+@app.route('/transactions/add-transaction', methods=["GET", "POST"])
+def add_transactions():
+    if request.method == "GET":
+        # return redirect(url_for("homepage.html"))
+        return render_template("analysis.html")
+    else:
+        user_collection = mongo.db.users
+
+        logged_in_username = session['username']
+        user = user_collection.find_one({"username" :logged_in_username})
+
+        title = request.form["trans-title"]
+        amount = request.form["trans-amount"]
+        category = request.form["trans-category"]
+        notes = request.form["trans-message"]
+        date = datetime.now()
+
+        transaction = {
+            "title": title,
+            "amount": amount,
+            "category" : category,
+            "date" : date,
+            "notes": notes
+        }
+    
+        user["transactions"].append(transaction)
+
+        transactions = user["transactions"]
+
+        # return redirect(url_for("home"))
+        return render_template("analysis.html", transactions=transactions)
 
 @app.route('/learn', methods=["GET"])
 def learn():
@@ -121,7 +152,7 @@ def login():
         user = list(collection.find({"username": username}))
         if len(user) == 0:
             return render_template('login.html', msg="Invalid username. Please create an account.")
-        elif bcrypt.hashpw(password.encode("utf-8"), user[0]["password"].encode("utf-8")):
+        elif bcrypt.hashpw(password.encode('utf-8'), user[0]['password'].encode('utf-8')) == user[0]['password'].encode('utf-8'):
             session["username"] = username
             return redirect(url_for('home'))
             # return render_template("homepage.html")
