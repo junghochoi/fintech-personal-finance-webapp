@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="jumbotron">
-    <h1 class="display-4">Monthly Details</h1>
+    <h1 class="display-4">Transaction Details</h1>
 	<div class="jumbo-cards">
 		<div class="row">
 			<div class="col">
 				<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-primary">
-						<h5 class="card-title">Monthly Transactions</h5>
+						<h5 class="card-title">Net Transactions</h5>
 						<h1 class="card-text">+$930.30</h1>
 					</div>
 				</div>
@@ -15,7 +15,7 @@
 			<div class="col">
 				<div class="card border-success mb-3" style="max-width: 18rem;">
 					<div class="card-body text-success">
-						<h5 class="card-title">Monthly Earnings</h5>
+						<h5 class="card-title">Earnings</h5>
 						<h1 class="card-text">$1,839.90</h1>
 					</div>
 				</div>
@@ -23,7 +23,7 @@
 			<div class="col">
 				<div class="card border-danger mb-3" style="max-width: 18rem;">
 					<div class="card-body text-danger">
-						<h5 class="card-title">Monthly Spending</h5>
+						<h5 class="card-title">Spending</h5>
 						<h1 class="card-text">$909.60</h1>
 					</div>
 				</div>
@@ -35,6 +35,12 @@
 <div class="social-media">
     <h1>Feed</h1>
     <h3>Create a Post</h3>
+
+
+
+
+
+
     <form method="POST" action="/home/add-post">
         <div class="row">
             <div class="col-5">
@@ -56,14 +62,32 @@
         </div>
         <input type="submit" value="Post" class="btn btn-primary">
     </form>
-    <ul>
-    {% for post in posts %}
-        {% set currentDate = ((post.date)|string).split(' ') %}
-        <h6>{{ currentDate[0] }} by {{post.author}}</h6>
-        <h4>{{ post.message }}</h4>
-        <p>{{ post.category }}</p>
-    {% endfor %}
-    </ul>
+
+    <div class="container">
+
+        <ul class="list-group">
+            {% for post in posts %}
+            {% set currentDate = ((post.date)|string).split(' ') %}
+            <li class="list-group-item">
+    
+                <h6>{{ currentDate[0] }} by {{post.author}}</h6>
+                <h4>{{ post.message }}</h4>
+                <p>{{ post.category }}</p>
+    
+         
+            </li>
+            {% endfor %}
+
+        </ul>
+    
+    </div>
+
+
+
+
+
+
+
 </div>
 
 {% endblock %}

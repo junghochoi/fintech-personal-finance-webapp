@@ -22,48 +22,51 @@ def index():
 
 @app.route('/home')
 def home():
+    if not session: 
+        return redirect(url_for('login'))
     collection = mongo.db.posts
     posts = collection.find({}).sort("date", -1)
     return render_template("homepage.html", posts=posts, title="Home")
 
-@app.route('/home/add-post', methods=["GET", "POST"])
+@app.route('/home/add-post', methods=["POST"])
 def add_post():
-    if request.method == "GET":
-        # return redirect(url_for("homepage.html"))
-        return render_template("homepage.html")
-    else:
+    if not session:
+        return redirect(url_for('index'))
+   
       
-        user_collection = mongo.db.users
-        post_collection = mongo.db.posts
+    user_collection = mongo.db.users
+    post_collection = mongo.db.posts
 
-        logged_in_username = session['username']
-        user = user_collection.find_one({"username" :logged_in_username})
+    logged_in_username = session['username']
+    user = user_collection.find_one({"username" : logged_in_username})
 
-        message = request.form["post-message"]
-        category= request.form["post-category"]
-        date = datetime.now()
+    message = request.form["post-message"]
+    category= request.form["post-category"]
+    date = datetime.now()
 
-        post = {
-            "message" : message,
-            "category" : category,
-            "date" : date,
-            "author" : logged_in_username
-        }
-    
-        user["posts"].append(post)
-        post_collection.insert(post)
+    post = {
+        "message" : message,
+        "category" : category,
+        "date" : date,
+        "author" : logged_in_username
+    }
 
-        posts = post_collection.find({}).sort("date", -1)
+    user["posts"].append(post)
+    post_collection.insert(post)
+
+    posts = post_collection.find({}).sort("date", -1)
 
 
-        return redirect(url_for("home"))
-        # return render_template("homepage.html", posts=posts)
+    return redirect(url_for("home"))
+    # return render_template("homepage.html", posts=posts)
 
 
 
 
 @app.route('/transactions', methods=["GET"])
 def analysis():
+    if not session:
+        return redirect(url_for('login'))
 
     # Some how get the list of transactions
     return render_template("analysis.html")
@@ -84,7 +87,8 @@ def learn():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-    session.clear()
+    if session:
+        return redirect(url_for('home'))
     if request.method == 'GET':
         return render_template('signup.html')
     else:
@@ -110,7 +114,8 @@ def signup():
 
 @app.route("/login", methods= ["GET", "POST"])
 def login():
-    
+    if session:
+        return redirect(url_for('home'))
     if request.method == 'GET':
         return render_template('login.html')
     else:
@@ -131,8 +136,8 @@ def login():
 @app.route('/logout', methods=["GET"]) 
 def logout():
     session.clear()
-    return redirect(url_for('home'))
-    return render_template("index.html")
+    return redirect(url_for('index'))
+    # return render_template("index.html")
 
 
 
