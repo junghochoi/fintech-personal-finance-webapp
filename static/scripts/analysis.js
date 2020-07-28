@@ -1,3 +1,5 @@
+
+
 $.ajax({
     url: "/analysis/balance"
 }).done((data)=>{
