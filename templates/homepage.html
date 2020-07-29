@@ -8,7 +8,11 @@
 				<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-primary">
 						<h5 class="card-title">Net Transactions</h5>
-						<h1 class="card-text">$</h1>
+                        {% if trans.sign == "neg": %}
+						    <h1 class="card-text">-${{ trans.net }}</h1>
+                        {% else: %}
+                            <h1 class="card-text">${{ trans.net }}</h1>
+                        {% endif %}
 					</div>
 				</div>
 			</div>
@@ -16,7 +20,7 @@
 				<div class="card border-success mb-3" style="max-width: 18rem;">
 					<div class="card-body text-success">
 						<h5 class="card-title">Earnings</h5>
-						<h1 class="card-text">+$</h1>
+						<h1 class="card-text">+${{ trans.earnings }}</h1>
 					</div>
 				</div>
 			</div>
@@ -24,7 +28,7 @@
 				<div class="card border-danger mb-3" style="max-width: 18rem;">
 					<div class="card-body text-danger">
 						<h5 class="card-title">Spending</h5>
-						<h1 class="card-text">-$</h1>
+						<h1 class="card-text">-${{ trans.spending }}</h1>
 					</div>
 				</div>
 			</div>
