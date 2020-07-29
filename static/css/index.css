@@ -1,0 +1,13 @@
+.showcase{
+    height: 100vh;
+    width: 100vw;
+
+   
+
+
+    background: linear-gradient(rgba(27, 38, 44, 0.65), rgba(27, 38, 44, 0.95)), url(../img/showcase.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}

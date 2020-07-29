@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<div class="container fixed-navbar-spacing">
 <h1>Transactions</h1>
 <div class="container">
 	<div class="row">
@@ -25,12 +26,8 @@
                         <canvas id="income-chart"></canvas>
                     </div>
                     <div class="charts hidden" id="2-chart">  
-                        <h3>2</h3>  
+                        <h3>Income vs Expense</h3>  
                         <canvas id="income-expense-chart"></canvas>
-                    </div>
-                    <div class="charts hidden" id="3-chart">    
-                        <h3>3</h3>
-                        
                     </div>
                 </div>
             </div>
@@ -136,6 +133,8 @@
             </div>
         </div>
     </div>
+</div>
+</div>
 
 
     <!-- Find a fix for this . reloading jquery twice-->
