@@ -4,7 +4,7 @@ from flask_pymongo import PyMongo
 from dotenv import load_dotenv
 from datetime import datetime
 import dummydata
-import bcrypt 
+import bcrypt
 
 app = Flask(__name__)
 load_dotenv()
@@ -56,7 +56,6 @@ def add_post():
 
     posts = post_collection.find({}).sort("date", -1)
 
-
     return redirect(url_for("home"))
     # return render_template("homepage.html", posts=posts)
 
@@ -68,17 +67,19 @@ def transactions():
     if not session:
         return redirect(url_for('login'))
 
-    # Some how get the list of transactions
     user_collection = mongo.db.users
     user = user_collection.find_one({'username': session['username']})
 
-    return render_template("analysis.html")
+    transactions = user["transactions"][::-1]
+    return render_template("analysis.html", transactions=transactions)
+
 
 @app.route('/transactions/add-transaction', methods=["POST"])
 def add_transactions():
 
     if not session:
         redirect(url_for('login'))
+
     user_collection = mongo.db.users
 
     logged_in_username = session['username']
@@ -86,8 +87,10 @@ def add_transactions():
 
     title = request.form["trans-title"]
     amount = int(request.form["trans-amount"])
-    result = int(user['currentBalance']) + amount
-    category = request.form["trans-category"]
+    result = user['currentBalance'] + amount
+    details = request.form["trans-category"].split(",")
+    main_category = details[0]
+    spec_category = details[1]
     notes = request.form["trans-message"]
     date = datetime.now()
 
@@ -95,18 +98,24 @@ def add_transactions():
         "title": title,
         "amount": amount,
         "result": result,
-        "category" : category,
+        "main_category" : main_category,
+        "spec_category": spec_category,
         "date" : date,
         "notes": notes
     }
 
     user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
     user_collection.update({'username': logged_in_username}, {'$set' : {'currentBalance': result}})
+    # if main_category == "spending" {
+        
+    # }
 
-    
+    # user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
+    transactions = user["transactions"][::-1]
 
     return redirect(url_for("transactions"))
     # return render_template("analysis.html", transactions=transactions)
+    # return redirect(f"https://0.0.0.0:5000{url_for('transactions')}")
 
 @app.route('/learn', methods=["GET"])
 def learn():
@@ -137,7 +146,9 @@ def signup():
                 "password": str(bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()), 'utf-8'),
                 "posts" : [],
                 "transactions": [],
-                "currentBalance" : 0
+                "currentBalance" : 0,
+                "totalSpending": 0,
+                "totalEarnings": 0
             })
             session["username"] = username
             return redirect(url_for('home'))
@@ -149,7 +160,8 @@ def signup():
 @app.route("/login", methods= ["GET", "POST"])
 def login():
     if session:
-        return redirect(url_for('home'))
+        # return redirect(url_for('home'))
+        return render_template('analysis.html')
     if request.method == 'GET':
         return render_template('login.html')
     else:
@@ -222,7 +234,7 @@ def categories_info():
     categories = {}
 
     for transaction in user_transactions:
-        c = transaction['category']
+        c = transaction['spec_category']
         t = int(transaction['amount'])
         if t > 0:
             continue

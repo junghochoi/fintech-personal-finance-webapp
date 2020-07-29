@@ -1,83 +1,166 @@
 {% extends "layout.html" %}
 {% block content %}
 
-
 <h1>Transactions</h1>
 <div class="container">
 	<div class="row">
 		<div class="col-12">
-			<canvas id="income-chart"></canvas>
+            <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="overview" href="#" onclick="loadOverview()">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="2" onclick="load2()">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="3" onclick="load3()">Link</a>
+                    </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="charts" id="overview-chart">    
+                        <h3>Overview</h3>
+                        <canvas id="income-chart"></canvas>
+                    </div>
+                    <div class="charts hidden" id="2-chart">  
+                        <h3>2</h3>  
+                        <canvas id="income-chart"></canvas>
+                    </div>
+                    <div class="charts hidden" id="3-chart">    
+                        <h3>3</h3>
+                        <canvas id="income-chart"></canvas>
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 
 	<!-- TODO: FIXI THIS BR THING -->
 
-	<div class="tr-table-graph">
+    <div class="row">
         <div class="col-6">
+
             <!-- Div of cards -->
-            <button type="button" class="btn btn-primary">+</button>
-            <form method="POST" action="/transactions/add-transaction">
-				<div class="row">
-					<div class="col-12">
-						<input type="text" name="trans-title" value="" placeholder="Title" class="form-control"></input>
-					</div>
-                    <div class="col-4">
-                        <input type="number" name="trans-amount" value="" placeholder="$0.00" step="0.01" class="form-control"></input>
+            <input type="button" class="btn btn-primary" id="open-btn" onclick="toggleForm()" value="+"></input>
+            <div class="hidden" id="transaction-form">
+                <form method="POST" action="/transactions/add-transaction">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" name="trans-title" value="" placeholder="Title" class="form-control"></input>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" name="trans-amount" value="" placeholder="$0.00" step="0.01" class="form-control"></input>
+                        </div>
+                        <div class="col-8">
+                            <select class="form-control" id="exampleFormControlSelect1" name="trans-category" value="">
+                                <option selected>Select a category...</option>
+                                <option disabled>Spending</option>
+                                <option value="spending,Housing & Utilities">Housing & Utilities</option>
+                                <option value="spending,Transportation">Transportation</option>
+                                <option value="spending,Food">Food</option>
+                                <option value="spending,Clothing">Clothing</option>
+                                <option value="spending,Education">Education</option>
+                                <option value="spending,Entertainment">Entertainment</option>
+                                <option value="spending,Other">Other</option>
+                                <option disabled>Earnings</option>
+                                <option value="earnings,Employment">Employment</option>
+                                <option value="earnings,Investments">Investments</option>
+                                <option value="earnings,Tasks & Self-Employment">Tasks & Self-Employment</option>
+                                <option value="earnings,Funds & Aid">Funds & Aid</option>
+                                <option value="earnings,Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="trans-message" value="" placeholder="Notes..." class="form-control"></textarea>
+                        </div>
+                        <div class="col-5">
+                            <input type="submit" value="Submit" class="btn btn-primary">
+                        </div>
                     </div>
-					<div class="col-8">
-						<select class="form-control" id="exampleFormControlSelect1" name="trans-category" value="">
-                            <option selected>Select a category...</option>
-                            <option>Housing & Utilities</option>
-                            <option>Transportation</option>
-                            <option>Food</option>
-                            <option>Clothing</option>
-                            <option>Education</option>
-                            <option>Entertainment</option>
-                            <option>Other</option>
-                        </select>
-					</div>
-					<div class="col-12">
-						<textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="trans-message" value="" placeholder="Notes..." class="form-control"></textarea>
-					</div>
-                    <div class="col-5">
-				        <input type="submit" value="Submit" class="btn btn-primary">
-                    </div>
-				</div>
-			    </form>
-            <!-- {% for transaction in transactions %}
-            {% set currentDate = ((post.date)|string).split(' ') %}
-            <h6>{{ currentDate[0] }} by User</h6>
-            <h4>{{ post.post }}</h4>
-            <p>{{ post.category }}</p>
-            {% endfor %} -->
+                </form>
+            </div>
+            {% for transaction in transactions %}
+            {% set currentDate = ((transaction.date)|string).split(' ') %}
+            <div class="card">
+                <div class="card-header">
+                    {{ currentDate[0] }} 
+                </div>
+                <div class="card-body">
+                    <p class="card-title text-muted">{{ transaction.spec_category }}</p>
+                    {% if transaction.main_category == "spending": %}
+                        <h3 class="card-title" style="color: red">-${{ transaction.amount }}</h3>
+                    {% else: %}
+                        <h3 class="card-title" style="color: green">+${{ transaction.amount }}</h3>
+                    {% endif %}
+                    <h5 class="card-title">{{ transaction.title }}</h5>
+                    <p class="card-text">{{ transaction.notes }}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <div class="col-6">
-            <!-- Graphs -->
+            <div class="row">
+                <div class="col-12">
+                    <canvas id="categories-barchart"></canvas>
+                </div>
+
+                <div class="col-12">
+                    <canvas id="categories-piechart"></canvas>
+                </div>
+
+            </div>
         </div>
     </div>
-    <div class="row">
-		<div class="col-12 col-lg-6">
-			<canvas id="categories-barchart"></canvas>
-		</div>
-
-		<div class="col-12 col-lg-6">
-			<canvas id="categories-piechart"></canvas>
-		</div>
-
-
-
-	</div>
+    
 
 	<button id="update">Update</button>
 
 
-<!-- Find a fix for this . reloading jquery twice-->
-<script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-<script src="../static/scripts/analysis.js"></script>
+    <!-- Find a fix for this . reloading jquery twice-->
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="/static/scripts/analysis.js"></script>
+    <!-- Integrate with analysis.js -->
+    <script>
+        function toggleForm() {
+            let btnValue = $("#open-btn").val();
+            if (btnValue == "+") {
+                $("#transaction-form").removeClass("hidden").addClass("visible");
+                $("#open-btn").val("^");
+            } else {
+                $("#transaction-form").removeClass("visible").addClass("hidden");
+                $("#open-btn").val("+");
+            }
+            
+        }
+
+        function loadOverview() {
+            $('.nav-link').removeClass("active");
+            $('.charts').removeClass("visible").addClass("hidden");
+            $('#overview-chart').removeClass("hidden").addClass("visible");
+            $('#overview').addClass("active");
+        }
+
+        
+        function load2() {
+            $('.nav-link').removeClass("active");
+            $('.charts').removeClass("visible").addClass("hidden");
+            $('#2-chart').removeClass("hidden").addClass("visible");
+            $('#2').addClass("active");
+        }
+
+        function load3() {
+            $('.nav-link').removeClass("active");
+            $('.charts').removeClass("visible").addClass("hidden");
+            $('#3-chart').removeClass("hidden").addClass("visible");
+            $('#3').addClass("active");
+        }
+    </script>
 
 
 

@@ -1,5 +1,6 @@
 console.log("connected")
 
+
 $.ajax({
     url: "/analysis/balance"
 }).done((data)=>{
@@ -12,7 +13,8 @@ $.ajax({
     let balances = transactions.map(t => t.result);
     let notes = transactions.map(t => t.notes);
     let change = transactions.map(t=> t.amount);
-    let categories = transactions.map(t=>t.category)
+    let types = transactions.map(t=>t.main_category);
+    let categories = transactions.map(t=>t.spec_category);
     console.log(dates);
     console.log(names);
     console.log(balances);
