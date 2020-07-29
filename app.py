@@ -24,8 +24,19 @@ def index():
 def home():
     if not session: 
         return redirect(url_for('login'))
-    collection = mongo.db.posts
-    posts = collection.find({}).sort("date", -1)
+
+    # user_collection = mongo.db.users
+    # logged_in_username = session['username']
+    # user = user_collection.find_one({"username" : logged_in_username})
+
+    # transaction_details = {
+    #     "net": user["currentBalance"],
+    #     "earnings": user["totalEarnings"],
+    #     "spending": user["totalSpending"]
+    # }
+
+    posts_collection = mongo.db.posts
+    posts = posts_collection.find({}).sort("date", -1)
     return render_template("homepage.html", posts=posts, title="Home")
 
 @app.route('/home/add-post', methods=["POST"])
@@ -33,7 +44,6 @@ def add_post():
     if not session:
         return redirect(url_for('index'))
    
-      
     user_collection = mongo.db.users
     post_collection = mongo.db.posts
 
@@ -70,6 +80,7 @@ def transactions():
     user_collection = mongo.db.users
     user = user_collection.find_one({'username': session['username']})
     transactions = user["transactions"][::-1]
+    print(transactions)
     return render_template("analysis.html", transactions=transactions)
 
 @app.route('/transactions/add-transaction', methods=["POST"])
@@ -102,9 +113,12 @@ def add_transactions():
         "notes": notes
     }
 
-    # if main_category == "spending" {
-        
-    # }
+
+
+    # if main_category == "spending":
+    #     user["currentBalance"] -= int(amount)
+    # else:
+    #     user["currentBalance"] += int(amount)
 
     user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
     transactions = user["transactions"][::-1]
