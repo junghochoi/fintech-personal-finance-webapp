@@ -219,85 +219,88 @@ def logout():
 # AJAX Calls to server
 
 
-@app.route("/analysis/total")
+@app.route("/analysis/total")# /analysis/all OR month or Week
+def get_info():
     user_collection = mongo.db.users
-    user = user_collection.find_one({"username" : session['username']})    
+    user = user_collection.find_one({"username" : session['username']}) 
+
 
 
     # Balances Data
     user_transactions = list(user['transactions'])
     user_transactions.sort(key = lambda x : x['date'])
-    for t in user_transactions:
-        t['date'] = t['date'].strftime("%m/%d/%y")
+
+        
 
 
     # Categories Data and income-expenses
     categories = {}
+    income_expenses = {
+        "Income": 0,
+        "Expenses" : 0
+    }
     for transaction in user_transactions:
-        if  transaction['main_category'] == 'earnings':
-            continue
+        transaction['date'] = transaction['date'].strftime("%m/%d/%y")
+
         c = transaction['spec_category']
         t = int(transaction['amount'])
+        if  transaction['main_category'] == 'earnings':
+            income_expenses['Income'] += t
+            continue
+        elif transaction['main_category'] == 'spending':
+            income_expenses['Expenses'] += t
+        
+        categories[c] = categories[c] + t if c in categories.keys() else t
 
-        if not c in categories.keys():
-            categories[c] = t
-        else:
-            categories[c] += t
-    return categories
 
-    # income-expenses data
-
-
- 
-    
+  
     return { 
         "balance": user_transactions,
         "categories" : categories,
+        "income-expense" : income_expenses
         
     }
 
 
 
-@app.route("/analysis/balance")
-def balance_info():
-    user_collection = mongo.db.users
-    user = user_collection.find_one({"username" : session['username']})    
-    user_transactions = list(user['transactions'])
-    user_transactions.sort(key = lambda x : x['date'])
+# @app.route("/analysis/balance")
+# def balance_info():
+#     user_collection = mongo.db.users
+#     user = user_collection.find_one({"username" : session['username']})    
+#     user_transactions = list(user['transactions'])
+#     user_transactions.sort(key = lambda x : x['date'])
 
 
      
-    for t in user_transactions:
-        t['date'] = t['date'].strftime("%m/%d/%y")
- 
-    
-    return { "data": user_transactions}
+#     for t in user_transactions:
+#         t['date'] = t['date'].strftime("%m/%d/%y")
+#     return { "data": user_transactions}
     
 
 
-@app.route("/analysis/categories")
-def categories_info():
-    user_collection = mongo.db.users
-    user = user_collection.find_one({"username" : session['username']}) 
+# @app.route("/analysis/categories")
+# def categories_info():
+#     user_collection = mongo.db.users
+#     user = user_collection.find_one({"username" : session['username']}) 
 
 
-    user_transactions = list(user['transactions'])
-    categories = {}
+#     user_transactions = list(user['transactions'])
+#     categories = {}
 
-    for transaction in user_transactions:
-        if  transaction['main_category'] == 'earnings':
-            continue
-        c = transaction['spec_category']
-        t = int(transaction['amount'])
+#     for transaction in user_transactions:
+#         if  transaction['main_category'] == 'earnings':
+#             continue
+#         c = transaction['spec_category']
+#         t = int(transaction['amount'])
 
-        if not c in categories.keys():
-            categories[c] = t
-        else:
-            categories[c] += t
-    return categories
+#         if not c in categories.keys():
+#             categories[c] = t
+#         else:
+#             categories[c] += t
+#     return categories
 
-@app.route('/analysis/income-expenses')
-def income_expenses_info():
+# @app.route('/analysis/income-expenses')
+# def income_expenses_info():
     
 
 
