@@ -2,7 +2,7 @@
 body{
     /* background-color: #1b262c; */
 
-    background-color: #bbe1fa;
+    background-color:white;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -18,4 +18,8 @@ body{
 .navbar-dark .navbar-brand{
     font-family: 'Roboto Mono', monospace;
     font-size: 2.0rem;
+}
+
+.fixed-navbar-spacing{
+    margin-top: 70px;
 }
