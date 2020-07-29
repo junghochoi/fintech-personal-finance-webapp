@@ -23,17 +23,35 @@ def index():
 @app.route('/home')
 def home():
     if not session: 
-        return redirect(url_for('login'))
-    collection = mongo.db.posts
-    posts = collection.find({}).sort("date", -1)
-    return render_template("homepage.html", posts=posts, title="Home")
+        # return redirect(url_for('login'))
+        return render_template("login.html")
+
+    user_collection = mongo.db.users
+    logged_in_username = session['username']
+    user = user_collection.find_one({"username" : logged_in_username})
+
+    net = user["currentBalance"]
+    if net < 0:
+        sign = "neg"
+    else:
+        sign = "pos"
+
+    transaction_details = {
+        "net": abs(net),
+        "sign": sign,
+        "earnings": user["totalEarnings"],
+        "spending": user["totalSpending"]
+    }
+
+    posts_collection = mongo.db.posts
+    posts = posts_collection.find({}).sort("date", -1)
+    return render_template("homepage.html", trans=transaction_details, posts=posts, title="Home")
 
 @app.route('/home/add-post', methods=["POST"])
 def add_post():
     if not session:
         return redirect(url_for('index'))
    
-      
     user_collection = mongo.db.users
     post_collection = mongo.db.posts
 
@@ -71,6 +89,7 @@ def transactions():
     user = user_collection.find_one({'username': session['username']})
 
     transactions = user["transactions"][::-1]
+    print(transactions)
     return render_template("analysis.html", transactions=transactions)
 
 
@@ -87,12 +106,21 @@ def add_transactions():
 
     title = request.form["trans-title"]
     amount = int(request.form["trans-amount"])
-    result = user['currentBalance'] + amount
     details = request.form["trans-category"].split(",")
     main_category = details[0]
     spec_category = details[1]
     notes = request.form["trans-message"]
     date = datetime.now()
+
+    if main_category == "spending":
+        result = user["currentBalance"] - amount
+        spendingUpdated = user["totalSpending"] + amount
+        user_collection.update({'username': logged_in_username}, {'$set' : {'totalSpending': spendingUpdated}})
+    else:
+        result = user["currentBalance"] + amount
+        earningsUpdated = user["totalEarnings"] + amount
+        user_collection.update({'username': logged_in_username}, {'$set' : {'totalEarnings': earningsUpdated}})
+
 
     transaction = {
         "title": title,
