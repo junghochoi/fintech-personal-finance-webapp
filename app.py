@@ -80,9 +80,11 @@ def transactions():
 
     user_collection = mongo.db.users
     user = user_collection.find_one({'username': session['username']})
+
     transactions = user["transactions"][::-1]
     print(transactions)
     return render_template("analysis.html", transactions=transactions)
+
 
 @app.route('/transactions/add-transaction', methods=["POST"])
 def add_transactions():
@@ -96,25 +98,23 @@ def add_transactions():
     user = user_collection.find_one({"username" :logged_in_username})
 
     title = request.form["trans-title"]
-    amount = request.form["trans-amount"]
-
+    amount = int(request.form["trans-amount"])
+    result = user['currentBalance'] + amount
     details = request.form["trans-category"].split(",")
     main_category = details[0]
     spec_category = details[1]
-
     notes = request.form["trans-message"]
     date = datetime.now()
 
     transaction = {
         "title": title,
         "amount": amount,
+        "result": result,
         "main_category" : main_category,
         "spec_category": spec_category,
         "date" : date,
         "notes": notes
     }
-
-
 
     # if main_category == "spending":
     #     user["currentBalance"] -= int(amount)
@@ -122,10 +122,11 @@ def add_transactions():
     #     user["currentBalance"] += int(amount)
 
     user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
+    user_collection.update({'username': logged_in_username}, {'$set' : {'currentBalance': result}})
     transactions = user["transactions"][::-1]
 
-    # return redirect(url_for("transactions"))
-    return render_template("analysis.html", transactions=transactions)
+    return redirect(url_for("transactions"))
+    # return render_template("analysis.html", transactions=transactions)
     # return redirect(f"https://0.0.0.0:5000{url_for('transactions')}")
 
 @app.route('/learn', methods=["GET"])
@@ -162,8 +163,8 @@ def signup():
                 "totalEarnings": 0
             })
             session["username"] = username
-            # return redirect(url_for('homepage'))
-            return render_template("homepage.html")
+            return redirect(url_for('home'))
+            # return render_template("homepage.html")
         else:
             return render_template('signup.html', msg="Username already taken. Choose another one or login.")
 
@@ -211,16 +212,24 @@ def balance_info():
     user_collection = mongo.db.users
     user = user_collection.find_one({"username" : session['username']})
 
-    # print(user['transactions'])
 
 
-    user_transactions = dummydata.transactions
-    user_transactions.sort(key = lambda x : datetime.strptime(x["date"], "%Y/%m/%d"))
+    # user_transactions = dummydata.transactions
 
-    return {
-        "initialBalance": 300,
-        "data": user_transactions    
-    }
+    
+    user_transactions = list(user['transactions'])
+    # for x in user_transactions:
+    #     print(x)
+
+
+    # user_transactions.sort(key = lambda x : datetime.strptime(x["date"], "%Y/%m/%d"))
+    user_transactions.sort(key = lambda x : x['date'])
+    for t in user_transactions:
+        t['date'] = t['date'].strftime("%m/%d/%y")
+ 
+    
+    return { "data": user_transactions}
+    
 
 
 @app.route("/analysis/categories")
@@ -229,22 +238,31 @@ def categories_info():
     # we just need to return something like this 
 
 
+    user_collection = mongo.db.users
+    user = user_collection.find_one({"username" : session['username']}) 
+
+
+    user_transactions = list(user['transactions'])
+    categories = {}
+
+    for transaction in user_transactions:
+        c = transaction['spec_category']
+        t = int(transaction['amount'])
+        if t > 0:
+            continue
+        else:
+            t = -t
+
+
+        if not c in categories.keys():
+            categories[c] = t
+        else:
+            categories[c] += t
+    
 
 
 
-
-    '''
-    categories = {
-        "eating out": 200,
-        "car/transportation": 300,
-        "housing": 4000,
-        "entertainment": 10,
-        "groceries": 80,
-        "uncategorized": 1000
-    }
-    '''
-    return dummydata.categories
-
+    return categories
 
 
     
