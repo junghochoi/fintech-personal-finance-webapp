@@ -1,13 +1,9 @@
 console.log("connected")
 
 
-$.ajax({
-    url: "/analysis/balance"
-}).done((data)=>{
-    
 
-    let transactions = data['data'];
-    
+
+balancesChartSetup = (transactions) =>{
     let dates = transactions.map(t => t.date);
     let names = transactions.map(t => t.title)
     let balances = transactions.map(t => t.result);
@@ -15,9 +11,7 @@ $.ajax({
     let change = transactions.map(t=> t.amount);
     let types = transactions.map(t=>t.main_category);
     let categories = transactions.map(t=>t.spec_category);
-    console.log(dates);
-    console.log(names);
-    console.log(balances);
+
     userData =  {
         labels: dates,
         datasets: [{
@@ -58,8 +52,6 @@ $.ajax({
         }
 
     }
-
-
     let ctx = document.getElementById('income-chart').getContext('2d');
     let chart = new Chart(ctx, {
         // The type of chart we want to create
@@ -69,25 +61,12 @@ $.ajax({
         // Configuration options go here
         options: config
     });
+}
 
-
-
-
-    // Create more buttons to filter out by Week,Month,Year,All
-    $('#update').on('click', ()=>{
-        userData.datasets[0].data[0]= 100;
-        chart.update()
-    });
-});
-
-
-$.ajax({
-    url: '/analysis/categories'
-}).done((res)=>{
+categoriesChartSetup = (categories) =>{
     
-
-    categories = Object.keys(res)
-    expenses = Object.values(res);
+    categories = Object.keys(categories)
+    expenses = Object.values(categories);
     barData = {
         labels: categories,
         datasets:[{
@@ -174,4 +153,17 @@ $.ajax({
         data: pieData,
         options: pieOptions
     });
+}
+
+
+$.ajax({
+    url: "/analysis/total"
+}).done((data)=>{
+    
+    let transactions = data['balance'];
+    let categories = data['categories']
+
+    balancesChartSetup(transactions);
+    categoriesChartSetup(categories);
 });
+

@@ -106,9 +106,7 @@ def add_transactions():
 
     user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
     user_collection.update({'username': logged_in_username}, {'$set' : {'currentBalance': result}})
-    # if main_category == "spending" {
-        
-    # }
+
 
     # user_collection.update({'username' : logged_in_username}, {'$push' : {'transactions' : transaction}})
     transactions = user["transactions"][::-1]
@@ -191,27 +189,56 @@ def logout():
 
 
 # AJAX Calls to server
+
+
+@app.route("/analysis/total")
+    user_collection = mongo.db.users
+    user = user_collection.find_one({"username" : session['username']})    
+
+
+    # Balances Data
+    user_transactions = list(user['transactions'])
+    user_transactions.sort(key = lambda x : x['date'])
+    for t in user_transactions:
+        t['date'] = t['date'].strftime("%m/%d/%y")
+
+
+    # Categories Data and income-expenses
+    categories = {}
+    for transaction in user_transactions:
+        if  transaction['main_category'] == 'earnings':
+            continue
+        c = transaction['spec_category']
+        t = int(transaction['amount'])
+
+        if not c in categories.keys():
+            categories[c] = t
+        else:
+            categories[c] += t
+    return categories
+
+    # income-expenses data
+
+
+ 
+    
+    return { 
+        "balance": user_transactions,
+        "categories" : categories,
+        
+    }
+
+
+
 @app.route("/analysis/balance")
 def balance_info():
-    # Replace this with some database stuff to get the user transactions.
-    # User_transactions should look something similar to what is in dummydata
-    # TODO: Discuss about database. Create Database.
-
     user_collection = mongo.db.users
-    user = user_collection.find_one({"username" : session['username']})
-
-
-
-    # user_transactions = dummydata.transactions
-
-    
+    user = user_collection.find_one({"username" : session['username']})    
     user_transactions = list(user['transactions'])
-    # for x in user_transactions:
-    #     print(x)
-
-
-    # user_transactions.sort(key = lambda x : datetime.strptime(x["date"], "%Y/%m/%d"))
     user_transactions.sort(key = lambda x : x['date'])
+
+
+     
     for t in user_transactions:
         t['date'] = t['date'].strftime("%m/%d/%y")
  
@@ -222,10 +249,6 @@ def balance_info():
 
 @app.route("/analysis/categories")
 def categories_info():
-
-    # we just need to return something like this 
-
-
     user_collection = mongo.db.users
     user = user_collection.find_one({"username" : session['username']}) 
 
@@ -234,23 +257,21 @@ def categories_info():
     categories = {}
 
     for transaction in user_transactions:
+        if  transaction['main_category'] == 'earnings':
+            continue
         c = transaction['spec_category']
         t = int(transaction['amount'])
-        if t > 0:
-            continue
-        else:
-            t = -t
-
 
         if not c in categories.keys():
             categories[c] = t
         else:
             categories[c] += t
+    return categories
+
+@app.route('/analysis/income-expenses')
+def income_expenses_info():
     
 
-
-
-    return categories
 
 
     
