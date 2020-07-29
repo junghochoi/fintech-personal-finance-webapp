@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import date, datetime
 import dummydata
 import bcrypt
 
@@ -80,16 +80,38 @@ def add_post():
 
 
 
-@app.route('/transactions', methods=["GET"])
-def transactions():
+@app.route('/transactions/<timeframe>', methods=["GET"])
+def transactions(timeframe="total"):
     if not session:
         return redirect(url_for('login'))
 
     user_collection = mongo.db.users
     user = user_collection.find_one({'username': session['username']})
 
-    transactions = user["transactions"][::-1]
-    print(transactions)
+    all_transactions = user["transactions"][::-1]
+    transactions = []
+    
+    if timeframe == "year":
+        for trans in all_transactions:
+            old_date_arr = current_date.split("-")
+            old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
+            if trans["date"].split(" ") >= old_date:
+                transactions += trans
+    elif timeframe == "month":
+        for trans in all_transactions:
+            old_date_arr = current_date.split("-")
+            old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
+            if trans["date"].split(" ") >= old_date:
+                transactions += trans
+    elif timeframe == "day":
+        for trans in all_transactions:
+            old_date_arr = current_date.split("-")
+            old_date = old_date_arr[0] + "-" + old_date_arr[1] + "-" + str(int(old_date_arr[2]) - 1)
+            if trans["date"].split(" ") >= old_date:
+                transactions += trans
+    else:
+        transactions = all_transactions
+
     return render_template("analysis.html", transactions=transactions)
 
 
@@ -213,21 +235,59 @@ def logout():
 
 
 
-
+@app.route("/analysis/specify")
+def reroute_timeframe():
+    timeframe = request.form["timeframe"]
+    if timeframe == "Year":
+        change_timeframe("year")
+        return redirect(url_for("/transactions/year"))
+    elif timeframe == "Month":
+        change_timeframe("month")
+        return redirect(url_for("/transactions/month"))
+    elif timeframe == "Day":
+        change_timeframe("day")
+        return redirect(url_for("/transactions/day"))
+    else:
+        change_timeframe()
+        return redirect(url_for("transactions/total"))
 
 
 # AJAX Calls to server
 
-
-@app.route("/analysis/total")# /analysis/all OR month or Week
-def get_info():
+@app.route("/analysis/<timeframe>")
+def change_timeframe(timeframe="total"):
     user_collection = mongo.db.users
     user = user_collection.find_one({"username" : session['username']}) 
 
 
 
     # Balances Data
-    user_transactions = list(user['transactions'])
+    all_transactions = list(user['transactions'])
+
+    current_date = date.today()
+    user_transactions = []
+
+    if timeframe == "year":
+        for trans in all_transactions:
+            old_date_arr = current_date.split("-")
+            old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
+            if trans["date"].split(" ") >= old_date:
+                user_transactions += trans
+    elif timeframe == "month":
+        for trans in all_transactions:
+            old_date_arr = current_date.split("-")
+            old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
+            if trans["date"].split(" ") >= old_date:
+                user_transactions += trans
+    elif timeframe == "day":
+        for trans in all_transactions:
+            old_date_arr = current_date.split("-")
+            old_date = old_date_arr[0] + "-" + old_date_arr[1] + "-" + str(int(old_date_arr[2]) - 1)
+            if trans["date"].split(" ") >= old_date:
+                user_transactions += trans
+    else:
+        user_transactions = all_transactions
+
     user_transactions.sort(key = lambda x : x['date'])
 
         
@@ -299,8 +359,9 @@ def get_info():
 #             categories[c] += t
 #     return categories
 
-# @app.route('/analysis/income-expenses')
-# def income_expenses_info():
+@app.route('/analysis/income-expenses')
+def income_expenses_info():
+    pass
     
 
 

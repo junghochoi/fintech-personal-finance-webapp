@@ -44,6 +44,7 @@
 
             <!-- Div of cards -->
             <input type="button" class="btn btn-primary" id="open-btn" onclick="toggleForm()" value="+"></input>
+            
             <div class="hidden" id="transaction-form">
                 <form method="POST" action="/transactions/add-transaction">
                     <div class="row">
@@ -83,6 +84,26 @@
                     </div>
                 </form>
             </div>
+
+            <form method="POST" action="/analysis/specify">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <select class="form-control" id="exampleFormControlSelect1" name="timeframe">
+                                <option selected>All Transactions</option>
+                                <option>Year</option>
+                                <option>Month</option>
+                                <option>Week</option>
+                                <option>Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <input type="button" class="btn btn-primary" id="update" value="Update"></input>
+                    </div>
+                </div>  
+            </form>
+
             {% for transaction in transactions %}
             {% set currentDate = ((transaction.date)|string).split(' ') %}
             <div class="card">
@@ -115,9 +136,6 @@
             </div>
         </div>
     </div>
-    
-
-	<button id="update">Update</button>
 
 
     <!-- Find a fix for this . reloading jquery twice-->
