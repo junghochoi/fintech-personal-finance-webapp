@@ -80,37 +80,38 @@ def add_post():
 
 
 
-@app.route('/transactions/<timeframe>', methods=["GET"])
-def transactions(timeframe="total"):
+# @app.route('/transactions/<timeframe>', methods=["GET"])
+@app.route('/transactions', methods=["GET"])
+# def transactions(timeframe="total"):
+def transactions():
     if not session:
         return redirect(url_for('login'))
 
     user_collection = mongo.db.users
     user = user_collection.find_one({'username': session['username']})
 
-    all_transactions = user["transactions"][::-1]
-    transactions = []
+    transactions = user["transactions"][::-1]
+    # transactions = []
+    # current_date = str(date.today())
     
-    if timeframe == "year":
-        for trans in all_transactions:
-            old_date_arr = current_date.split("-")
-            old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
-            if trans["date"].split(" ") >= old_date:
-                transactions += trans
-    elif timeframe == "month":
-        for trans in all_transactions:
-            old_date_arr = current_date.split("-")
-            old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
-            if trans["date"].split(" ") >= old_date:
-                transactions += trans
-    elif timeframe == "day":
-        for trans in all_transactions:
-            old_date_arr = current_date.split("-")
-            old_date = old_date_arr[0] + "-" + old_date_arr[1] + "-" + str(int(old_date_arr[2]) - 1)
-            if trans["date"].split(" ") >= old_date:
-                transactions += trans
-    else:
-        transactions = all_transactions
+    # if timeframe == "year":
+    #     for trans in all_transactions:
+    #         old_date_arr = current_date.split("-")
+    #         old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
+    #         if str(trans["date"]).split(" ")[0] >= old_date:
+    #             transactions += trans
+    # elif timeframe == "month":
+    #     for trans in all_transactions:
+    #         old_date_arr = current_date.split("-")
+    #         old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
+    #         if str(trans["date"]).split(" ")[0] >= old_date:
+    #             transactions += trans
+    # elif timeframe == "day":
+    #     for trans in all_transactions:
+    #         if str(trans["date"]).split(" ")[0] == current_date:
+    #             transactions += trans
+    # else:
+    #     transactions = all_transactions
 
     return render_template("analysis.html", transactions=transactions)
 
@@ -235,21 +236,22 @@ def logout():
 
 
 
-@app.route("/analysis/specify")
-def reroute_timeframe():
-    timeframe = request.form["timeframe"]
-    if timeframe == "Year":
-        change_timeframe("year")
-        return redirect(url_for("/transactions/year"))
-    elif timeframe == "Month":
-        change_timeframe("month")
-        return redirect(url_for("/transactions/month"))
-    elif timeframe == "Day":
-        change_timeframe("day")
-        return redirect(url_for("/transactions/day"))
-    else:
-        change_timeframe()
-        return redirect(url_for("transactions/total"))
+# @app.route("/analysis/specify")
+# def reroute_timeframe():
+#     timeframe = request.form["timeframe"]
+#     if timeframe == "Year":
+#         change_timeframe("year")
+#         return redirect(url_for("/transactions/year"))
+#         # return render_template("analysis.html")
+#     elif timeframe == "Month":
+#         change_timeframe("month")
+#         return redirect(url_for("/transactions/month"))
+#     elif timeframe == "Day":
+#         change_timeframe("day")
+#         return redirect(url_for("/transactions/day"))
+#     else:
+#         change_timeframe()
+#         return redirect(url_for("transactions/total"))
 
 
 # AJAX Calls to server
@@ -264,26 +266,25 @@ def change_timeframe(timeframe="total"):
     # Balances Data
     all_transactions = list(user['transactions'])
 
-    current_date = date.today()
+    current_date = str(date.today())
     user_transactions = []
 
     if timeframe == "year":
         for trans in all_transactions:
             old_date_arr = current_date.split("-")
             old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
-            if trans["date"].split(" ") >= old_date:
+            if str(trans["date"]).split(" ")[0] >= old_date:
                 user_transactions += trans
     elif timeframe == "month":
         for trans in all_transactions:
             old_date_arr = current_date.split("-")
             old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
-            if trans["date"].split(" ") >= old_date:
+            if str(trans["date"]).split(" ")[0] >= old_date:
                 user_transactions += trans
     elif timeframe == "day":
         for trans in all_transactions:
             old_date_arr = current_date.split("-")
-            old_date = old_date_arr[0] + "-" + old_date_arr[1] + "-" + str(int(old_date_arr[2]) - 1)
-            if trans["date"].split(" ") >= old_date:
+            if str(trans["date"]).split(" ")[0] == current_date:
                 user_transactions += trans
     else:
         user_transactions = all_transactions

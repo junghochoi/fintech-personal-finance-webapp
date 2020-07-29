@@ -85,7 +85,7 @@
                 </form>
             </div>
 
-            <form method="POST" action="/analysis/specify">
+            <!-- <form method="POST" action="/analysis/specify">
                 <div class="row">
                     <div class="col-8">
                         <div class="form-group">
@@ -102,7 +102,7 @@
                         <input type="button" class="btn btn-primary" id="update" value="Update"></input>
                     </div>
                 </div>  
-            </form>
+            </form> -->
 
             {% for transaction in transactions %}
             {% set currentDate = ((transaction.date)|string).split(' ') %}
