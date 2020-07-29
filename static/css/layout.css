@@ -1,0 +1,21 @@
+
+body{
+    /* background-color: #1b262c; */
+
+    background-color: #bbe1fa;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #bbe1fa;
+    font-size: 1.2rem;
+}
+
+.bg-dark{
+    background-color:#0f4c75!important
+}
+
+
+.navbar-dark .navbar-brand{
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2.0rem;
+}

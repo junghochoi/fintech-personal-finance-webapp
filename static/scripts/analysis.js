@@ -1,8 +1,5 @@
 console.log("connected")
 
-
-
-
 balancesChartSetup = (transactions) =>{
     let dates = transactions.map(t => t.date);
     let names = transactions.map(t => t.title)
@@ -63,10 +60,11 @@ balancesChartSetup = (transactions) =>{
     });
 }
 
-categoriesChartSetup = (categories) =>{
+categoriesChartSetup = (data) =>{
     
-    categories = Object.keys(categories)
-    expenses = Object.values(categories);
+    console.log(data)
+    categories = Object.keys(data)
+    expenses = Object.values(data);
     barData = {
         labels: categories,
         datasets:[{
@@ -155,6 +153,58 @@ categoriesChartSetup = (categories) =>{
     });
 }
 
+incomeExpenseChartSetup = (data)=> {
+
+
+    categories = Object.keys(data)
+    numbers = Object.values(data);
+    
+
+    barData = {
+        labels: categories,
+        datasets:[{
+            
+            data: numbers,
+
+
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+
+            ],
+            borderWidth: 3
+        }]
+    };
+
+
+    barOptions = {
+        title:{
+            display: true,
+            text: 'Income vs Expense'
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    };
+
+
+    let barCanvas = document.getElementById('income-expense-chart').getContext('2d');
+    let categoriesBarChart = new Chart(barCanvas,{
+        type: 'horizontalBar',
+        data: barData,
+        options: barOptions
+
+    });
+}
 
 $.ajax({
     url: "/analysis/total"
@@ -162,8 +212,10 @@ $.ajax({
     
     let transactions = data['balance'];
     let categories = data['categories']
+    let incomeExpense = data['income-expense']
 
     balancesChartSetup(transactions);
     categoriesChartSetup(categories);
+    incomeExpenseChartSetup(incomeExpense);
 });
 
