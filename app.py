@@ -23,7 +23,8 @@ def index():
 @app.route('/home')
 def home():
     if not session: 
-        return redirect(url_for('login'))
+        # return redirect(url_for('login'))
+        return render_template("login.html")
 
     # user_collection = mongo.db.users
     # logged_in_username = session['username']
