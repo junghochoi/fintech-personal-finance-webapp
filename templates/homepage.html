@@ -1,7 +1,7 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} 
 {% block content %}
-<div class="jumbotron">
-    <h1 class="display-4 text-white">Transaction Details</h1>
+<div class="jumbotron jumbotron-main">
+    <h1 class="display-4 jumbo-head">Transaction Dashboard</h1>
 	<div class="jumbo-cards">
 		<div class="row">
 			<div class="col-12 col-lg-4">
@@ -37,53 +37,54 @@
 </div>
 
 <div class="social-media">
-    <h1>Feed</h1>
-    <h3>Create a Post</h3>
+    <h1 class="wallet-title">The Wallet</h1>
+    <div class="hub">
+        <p><em>A hub for finance-related conversation.</em></p>
 
+        <div class="jumbotron create-post">
+            <h2>Create a Post</h2>
 
-
-
-
-
-    <form method="POST" action="/home/add-post">
-        <div class="row">
-            <div class="col-5">
-                <input type="text" name="post-title" value="" placeholder="Title" class="form-control"></input>
-            </div>
-            <div class="col-3">
-                <select class="form-control" id="exampleFormControlSelect1" name="post-category" value="">
-                    <option selected>Select a category...</option>
-                    <option>Status</option>
-                    <option>Resource</option>
-                    <option>Question</option>
-                    <option>Advice</option>
-                    <option>Other</option>
-                </select>
-            </div>
-            <div class="col-5">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="post-message" value="" placeholder="Create a post..." class="form-control"></textarea>
-            </div>
+            <form method="POST" action="/home/add-post">
+                <div class="row">
+                    <div class="col-8">
+                        <input type="text" name="post-title" value="" placeholder="Title" class="form-control"></input>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control" id="exampleFormControlSelect1" name="post-category" value="">
+                            <option selected>Select a category...</option>
+                            <option>Status</option>
+                            <option>Resource</option>
+                            <option>Question</option>
+                            <option>Advice</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="post-message" value="" placeholder="Create a post..." class="form-control"></textarea>
+                    </div>
+                </div>
+                <input type="submit" value="Post" class="btn btn-primary">
+            </form>
         </div>
-        <input type="submit" value="Post" class="btn btn-primary">
-    </form>
 
-    <div class="container">
+        <div class="container">
 
-        <ul class="list-group">
-            {% for post in posts %}
-            {% set currentDate = ((post.date)|string).split(' ') %}
-            <li class="list-group-item">
-    
-                <h6>{{ currentDate[0] }} by {{post.author}}</h6>
-                <h4>{{ post.message }}</h4>
-                <p>{{ post.category }}</p>
-    
-         
-            </li>
-            {% endfor %}
+            <ul class="list-group">
+                {% for post in posts %}
+                {% set currentDate = ((post.date)|string).split(' ') %}
+                <li class="list-group-item">
+        
+                    <h6>{{ currentDate[0] }} by {{post.author}}</h6>
+                    <h4>{{ post.message }}</h4>
+                    <p>{{ post.category }}</p>
+        
+            
+                </li>
+                {% endfor %}
 
-        </ul>
-    
+            </ul>
+        
+        </div>
     </div>
 
 

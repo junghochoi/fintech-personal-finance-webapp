@@ -1,3 +1,38 @@
-.jumbotron{
-    background-color: #3282b8;
+.jumbotron-main {
+    margin: 130px 50px 130px 50px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 #bbe1fa;
+}
+
+.jumbo-head {
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 40px;
+    color: #0f4c75;
+}
+
+.card {
+    justify-content: center;
+    height: 115px;
+}
+
+.card-text {
+    margin-top: -10px;
+}
+
+.wallet-title {
+    color: #1b262c;
+    font-size: 72px;
+    margin-bottom: 0px;
+}
+
+.hub {
+    margin-left: 10px;
+}
+
+.create-post {
+   background-color: #bbe1fa;
+   width: 70%;
+   padding: 20px;
 }

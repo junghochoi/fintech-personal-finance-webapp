@@ -256,38 +256,39 @@ def logout():
 
 # AJAX Calls to server
 
-@app.route("/analysis/<timeframe>")
-def change_timeframe(timeframe="total"):
+@app.route("/analysis/total")
+# def change_timeframe(timeframe="total"):
+def display():
     user_collection = mongo.db.users
     user = user_collection.find_one({"username" : session['username']}) 
 
 
 
     # Balances Data
-    all_transactions = list(user['transactions'])
+    user_transactions = list(user['transactions'])
 
-    current_date = str(date.today())
-    user_transactions = []
+    # current_date = str(date.today())
+    # user_transactions = []
 
-    if timeframe == "year":
-        for trans in all_transactions:
-            old_date_arr = current_date.split("-")
-            old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
-            if str(trans["date"]).split(" ")[0] >= old_date:
-                user_transactions += trans
-    elif timeframe == "month":
-        for trans in all_transactions:
-            old_date_arr = current_date.split("-")
-            old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
-            if str(trans["date"]).split(" ")[0] >= old_date:
-                user_transactions += trans
-    elif timeframe == "day":
-        for trans in all_transactions:
-            old_date_arr = current_date.split("-")
-            if str(trans["date"]).split(" ")[0] == current_date:
-                user_transactions += trans
-    else:
-        user_transactions = all_transactions
+    # if timeframe == "year":
+    #     for trans in all_transactions:
+    #         old_date_arr = current_date.split("-")
+    #         old_date = str(int(old_date_arr[0]) - 1) + "-" + old_date_arr[1] + "-" + old_date_arr[2]
+    #         if str(trans["date"]).split(" ")[0] >= old_date:
+    #             user_transactions += trans
+    # elif timeframe == "month":
+    #     for trans in all_transactions:
+    #         old_date_arr = current_date.split("-")
+    #         old_date = old_date_arr[0] + "-" + str(int(old_date_arr[1]) - 1) + "-" + old_date_arr[2]
+    #         if str(trans["date"]).split(" ")[0] >= old_date:
+    #             user_transactions += trans
+    # elif timeframe == "day":
+    #     for trans in all_transactions:
+    #         old_date_arr = current_date.split("-")
+    #         if str(trans["date"]).split(" ")[0] == current_date:
+    #             user_transactions += trans
+    # else:
+    #     user_transactions = all_transactions
 
     user_transactions.sort(key = lambda x : x['date'])
 
