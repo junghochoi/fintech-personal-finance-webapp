@@ -2,22 +2,18 @@
 {% block content %}
 
 <div class="container fixed-navbar-spacing">
-<h1>Transactions</h1>
 <div class="container">
 	<div class="row">
 		<div class="col-12">
             <div class="card text-center">
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="overview" href="#" onclick="loadOverview()">Overview</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="2" onclick="load2()">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="3" onclick="load3()">Link</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="overview" href="#" onclick="loadOverview()">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="inc-exp" onclick="load2()">Income vs. Expenses</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
@@ -26,7 +22,7 @@
                         <canvas id="income-chart"></canvas>
                     </div>
                     <div class="charts hidden" id="2-chart">  
-                        <h3>Income vs Expense</h3>  
+                        <h3>Income vs. Expenses</h3>  
                         <canvas id="income-expense-chart"></canvas>
                     </div>
                 </div>
@@ -170,7 +166,7 @@
             $('.nav-link').removeClass("active");
             $('.charts').removeClass("visible").addClass("hidden");
             $('#2-chart').removeClass("hidden").addClass("visible");
-            $('#2').addClass("active");
+            $('#inc-exp').addClass("active");
         }
 
         function load3() {

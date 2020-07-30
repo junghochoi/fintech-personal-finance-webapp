@@ -14,7 +14,6 @@
 
 .card {
     justify-content: center;
-    height: 115px;
 }
 
 .card-text {
@@ -33,6 +32,25 @@
 
 .create-post {
    background-color: #bbe1fa;
+   border: #0f4c75;
    width: 70%;
-   padding: 20px;
+   padding: 25px;
+   margin-bottom: 30px;
+}
+
+.create-post-title {
+    margin-bottom: 20px;
+}
+
+input {
+    margin-bottom: 5px;
+}
+
+textarea {
+    margin-bottom: 15px;
+}
+
+.btn {
+    background-color: #0f4c75;
+    border: #0f4c75;
 }

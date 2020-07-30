@@ -60,9 +60,11 @@ def add_post():
 
     message = request.form["post-message"]
     category= request.form["post-category"]
+    title = request.form["post-title"]
     date = datetime.now()
 
     post = {
+        "title": title,
         "message" : message,
         "category" : category,
         "date" : date,

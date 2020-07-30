@@ -185,7 +185,7 @@ incomeExpenseChartSetup = (data)=> {
     barOptions = {
         title:{
             display: true,
-            text: 'Income vs Expense'
+            text: 'Income vs. Expenses'
         },
         scales: {
             xAxes: [{

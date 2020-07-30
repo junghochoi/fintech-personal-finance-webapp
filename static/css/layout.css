@@ -5,13 +5,19 @@ body{
     background-color:white;
 }
 
+.logo {
+    height: 50px;
+    border-radius: 5px;
+    margin: -10px 20px 0px 0px;
+}
+
 .navbar-dark .navbar-nav .nav-link {
     color: #bbe1fa;
     font-size: 1.2rem;
 }
 
 .bg-dark{
-    background-color:#0f4c75!important
+    background-color:#0f4c75!important;
 }
 
 
@@ -21,9 +27,15 @@ body{
 }
 
 .fixed-navbar-spacing{
-<<<<<<< HEAD
-    margin-top: 73px;
-=======
     margin-top: 100px;
->>>>>>> c8cfc453a146f6c504c67d07cb59f3b7147bead1
+}
+
+i {
+    margin: 5px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    /* background-color: #0f4c75; */
 }

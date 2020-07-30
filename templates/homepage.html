@@ -1,16 +1,11 @@
 {% extends "layout.html" %} 
 {% block content %}
-<<<<<<< HEAD
 
 
 
 <div class="container fixed-navbar-spacing">
-<div class="jumbotron">
-    <h1 class="display-4 text-white">Transaction Details</h1>
-=======
 <div class="jumbotron jumbotron-main">
     <h1 class="display-4 jumbo-head">Transaction Dashboard</h1>
->>>>>>> c8cfc453a146f6c504c67d07cb59f3b7147bead1
 	<div class="jumbo-cards">
 		<div class="row">
 			<div class="col-12 col-lg-4">
@@ -46,19 +41,19 @@
 </div>
 
 <div class="social-media">
-    <h1 class="wallet-title">The Wallet</h1>
+    <h1 class="wallet-title">The <em>Wall</em>et</h1>
     <div class="hub">
         <p><em>A hub for finance-related conversation.</em></p>
 
         <div class="jumbotron create-post">
-            <h2>Create a Post</h2>
+            <h2 class="create-post-title">Create a Post</h2>
 
             <form method="POST" action="/home/add-post">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-7">
                         <input type="text" name="post-title" value="" placeholder="Title" class="form-control"></input>
                     </div>
-                    <div class="col-4">
+                    <div class="col-5">
                         <select class="form-control" id="exampleFormControlSelect1" name="post-category" value="">
                             <option selected>Select a category...</option>
                             <option>Status</option>
@@ -76,22 +71,23 @@
             </form>
         </div>
 
-        <div class="container">
-
-            <ul class="list-group">
-                {% for post in posts %}
+        <div class="card-columns">
+            {% for post in posts %}
                 {% set currentDate = ((post.date)|string).split(' ') %}
-                <li class="list-group-item">
-        
-                    <h6>{{ currentDate[0] }} by {{post.author}}</h6>
-                    <h4>{{ post.message }}</h4>
-                    <p>{{ post.category }}</p>
-        
-            
-                </li>
-                {% endfor %}
-
-            </ul>
+                <div class="card">
+                    <div class="card-body">
+                        {% if (post.category | string) == "Select a category..." %}
+                            <p class="card-text text-muted"></p>
+                        {% else %}
+                            <p class="card-text text-muted">{{post.category}}</small></p>
+                        {% endif %}
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text text-muted"><em>by {{post.author}}</em></p>
+                        <p class="card-text">{{ post.message }}</p>
+                        <p class="card-text"><small class="text-muted">{{ currentDate[0] }}</small></p>
+                    </div>
+                </div>
+            {% endfor %}
         
         </div>
     </div>
@@ -102,7 +98,6 @@
 
 
 
-</div>
 </div>
 
 {% endblock %}
