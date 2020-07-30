@@ -1,15 +1,32 @@
 {% extends "layout.html" %}
 {% block content %}
+ 
 
-
-<div class="container">
-    <h1>Signup</h1>
+<div class="log-container">
+    <img class="log-img" src="/static/img/logo.png">
     <form method="POST" action="/signup">
-        <label for="username">User Name:</label>
-        <input type="text" name="username" value="">
-        <label for="password">Password:</label>
-        <input type="password" name="password" value="">
-        <input type="submit" value="Submit">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4 bg-su top">
+                <h4 class="log-title su-title">Sign Up</h4>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 bg-su">
+                <input class="form-control log-input" type="text" name="username" placeholder="Username" value="">
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 bg-su">
+                <input class="form-control log-input" type="password" name="password" placeholder="Password" value="">
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 bg-su">
+                <input class="btn btn-primary submit-btn submit-btn-su bg-light" type="submit" value="Submit">
+            </div>
+            <div class="col-4"></div>
+        </div>
     </form>
     <div class="error-message">{{ msg }}</div>
 </div>
