@@ -1,0 +1,48 @@
+.log-container {
+    text-align: center;
+}
+
+.log-img {
+    height: 40px;
+    margin-left: -3px;
+    margin: 10px;
+}
+
+.log-title {
+    margin-bottom: 20px;
+}
+
+.su-title {
+    color: white;
+}
+
+.log-input {
+    border-color: #0f4c75;
+    margin-bottom: 10px;
+}
+
+.submit-btn {
+    margin: 20px 0px 30px 0px;
+}
+
+.submit-btn-su {
+    color: #0f4c75;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 100px;
+}
+
+.bg-col {
+    background-color: #bbe1fa;
+}
+
+.bg-su {
+    background-color: #0f4c75;
+}
+
+.top {
+    padding-top: 30px;
+    margin-top: 10px;
+}

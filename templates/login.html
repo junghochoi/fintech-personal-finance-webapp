@@ -1,31 +1,34 @@
 {% extends "layout.html" %}
 {% block content %}
+ 
 
-
-<div class="container fixed-navbar-spacing">
-
-    <h1>Login</h1>
+<div class="log-container">
+    <img class="log-img" src="/static/img/logo.png">
     <form method="POST" action="/login">
-        <div class="form-group">
-          <label for="username">Email Username</label>
-          <input type="text" name="username" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4 bg-col top">
+                <h4 class="log-title">Login</h4>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 bg-col">
+                <input class="form-control log-input" type="text" name="username" placeholder="Username" value="">
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 bg-col">
+                <input class="form-control log-input" type="password" name="password" placeholder="Password" value="">
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 bg-col">
+                <input class="btn btn-primary submit-btn" type="submit" value="Submit">
+            </div>
+            <div class="col-4"></div>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    
-    <!-- <form method="POST" action="/login">
-        <label for="username">User Name:</label>
-        <input type="text" name="username" value="">
-        <label for="password">Password:</label>
-        <input type="password" name="password" value="">
-        <input type="submit" value="Submit">
     </form>
-    <div class="error-message">{{ msg }}</div> -->
+    <div class="error-message">{{ msg }}</div>
 </div>
 
 {% endblock %}
