@@ -1,4 +1,6 @@
-
+html{
+    scroll-behavior: smooth;
+}
 body{
     /* background-color: #1b262c; */
 
@@ -36,7 +38,8 @@ i {
     margin: 5px;
 }
 
-.footer {
+.footer-template {
+    height: 10vh;
     text-align: center;
     margin-top: 30px;
     /* background-color: #0f4c75; */
