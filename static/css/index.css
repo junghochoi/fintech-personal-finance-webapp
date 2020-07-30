@@ -18,23 +18,22 @@
     
     color: white;
     font-size: 6.0rem;
-    grid-column: 2/3;
-    grid-row: 2/4;
+    /* grid-column: 2/3;
+    grid-row: 2/4; */
 }
 .blurb{
     color: white;
     font-size: 2rem;
-    grid-row: 3/4;
-    grid-column: 2/5;
-    margin-top: -70px;
+    /* grid-row: 3/4;
+    grid-column: 2/5; */
 }
 .blurb a{
     font-size: 2rem;
 }
 
 .get-started{
-    grid-row: 4/5;
-    grid-column: 2/4;
+    /* grid-row: 4/5;
+    grid-column: 2/4; */
 }
 
 .btn-primary{
