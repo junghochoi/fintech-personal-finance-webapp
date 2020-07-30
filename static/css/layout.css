@@ -20,7 +20,9 @@ body{
     background-color:#0f4c75!important;
 }
 
-
+.logo-font{
+    font-family: 'Roboto Mono', monospace;
+}
 .navbar-dark .navbar-brand{
     font-family: 'Roboto Mono', monospace;
     font-size: 2.0rem;
