@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container fixed-navbar-spacing">
-<div class="container-ana">
+
+<div class="container-ana container">
+    <h1 class="text-center p-5">Analysis</h1>
 	<div class="row">
 		<div class="col-12">
             <div class="card text-center">
@@ -31,11 +32,11 @@
                     <div class="charts hidden" id="3-chart">  
                         <h3 class="chart-head">Expenses Breakdown</h3>  
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12 col-lg-6">
                                 <canvas class="exp-chart" id="categories-barchart"></canvas>
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-12 col-lg-6">
                                 <canvas class="exp-chart" id="categories-piechart"></canvas>
                             </div>
 
@@ -145,54 +146,54 @@
             </div>
         </div>
     </div>
-    </div>
 </div>
 
 
+
     <!-- Find a fix for this . reloading jquery twice-->
-    <script
-    src="https://code.jquery.com/jquery-3.5.1.js"
-    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-    crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-    <script src="/static/scripts/analysis.js"></script>
-    <!-- Integrate with analysis.js -->
-    <script>
-        function toggleForm() {
-            let btnValue = $("#open-btn").val();
-            if (btnValue == "+ Log Transaction") {
-                $("#transaction-form").removeClass("hidden").addClass("visible");
-                $("#open-btn").val("^ Cancel");
-            } else {
-                $("#transaction-form").removeClass("visible").addClass("hidden");
-                $("#open-btn").val("+ Log Transaction");
+<script
+src="https://code.jquery.com/jquery-3.5.1.js"
+integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="/static/scripts/analysis.js"></script>
+<!-- Integrate with analysis.js -->
+<script>
+    function toggleForm() {
+        let btnValue = $("#open-btn").val();
+        if (btnValue == "+ Log Transaction") {
+            $("#transaction-form").removeClass("hidden").addClass("visible");
+            $("#open-btn").val("^ Cancel");
+        } else {
+            $("#transaction-form").removeClass("visible").addClass("hidden");
+            $("#open-btn").val("+ Log Transaction");
 
-            }
-            
         }
-
-        function loadOverview() {
-            $('.nav-link').removeClass("active");
-            $('.charts').removeClass("visible").addClass("hidden");
-            $('#overview-chart').removeClass("hidden").addClass("visible");
-            $('#overview').addClass("active");
-        }
-
         
-        function load2() {
-            $('.nav-link').removeClass("active");
-            $('.charts').removeClass("visible").addClass("hidden");
-            $('#2-chart').removeClass("hidden").addClass("visible");
-            $('#inc-exp').addClass("active");
-        }
+    }
 
-        function load3() {
-            $('.nav-link').removeClass("active");
-            $('.charts').removeClass("visible").addClass("hidden");
-            $('#3-chart').removeClass("hidden").addClass("visible");
-            $('#exp').addClass("active");
-        }
-    </script>
+    function loadOverview() {
+        $('.nav-link').removeClass("active");
+        $('.charts').removeClass("visible").addClass("hidden");
+        $('#overview-chart').removeClass("hidden").addClass("visible");
+        $('#overview').addClass("active");
+    }
+
+    
+    function load2() {
+        $('.nav-link').removeClass("active");
+        $('.charts').removeClass("visible").addClass("hidden");
+        $('#2-chart').removeClass("hidden").addClass("visible");
+        $('#inc-exp').addClass("active");
+    }
+
+    function load3() {
+        $('.nav-link').removeClass("active");
+        $('.charts').removeClass("visible").addClass("hidden");
+        $('#3-chart').removeClass("hidden").addClass("visible");
+        $('#exp').addClass("active");
+    }
+</script>
 
 
 
