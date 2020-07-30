@@ -57,7 +57,7 @@
                     <ul class="navbar-nav ml-auto">
                         {% if session: %}
                             <li class="nav-item">
-                                <a class="nav-link" href="/logout">Logout from {{session['username']}}</a>
+                                <a class="nav-link" href="/logout">Logout ({{session['username']}})</a>
                             </li>
                         {% else: %}
                             <li class="nav-item">
