@@ -1,7 +1,5 @@
 .showcase{
     height: 100vh;
-    
-
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;
@@ -63,6 +61,7 @@
     min-height: 100vh;
     padding: -30px;
     background-color: #bbe1fa;
+    padding-bottom: 30px;
 }
 
 .icon-background{
@@ -85,4 +84,14 @@
 .ending{
     min-height: 20vh;
     background-color:#0f4c75;
+}
+
+.fin-ind {
+    background-color: lightgray;
+    padding: 20px;
+    text-align: center;
+}
+
+.btn-sun {
+    margin-top: 10px;
 }
