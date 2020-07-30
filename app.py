@@ -130,7 +130,7 @@ def add_transactions():
     user = user_collection.find_one({"username" :logged_in_username})
 
     title = request.form["trans-title"]
-    amount = int(request.form["trans-amount"])
+    amount = float(request.form["trans-amount"])
     details = request.form["trans-category"].split(",")
     main_category = details[0]
     spec_category = details[1]

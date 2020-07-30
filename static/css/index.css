@@ -26,19 +26,23 @@
     color: white;
     font-size: 2rem;
     grid-row: 3/4;
-    grid-column: 2/4;
-    
+    grid-column: 2/5;
 }
-.get-started{
 
+.get-started{
     grid-row: 4/5;
     grid-column: 2/4;
 }
+
 .btn-primary{
     background-color: #1b262c;
     border-color: #1b262c;
-    font-size: 2rem;
 }
+
+.btn-gs {
+    font-size: 1.5em;
+}
+
 .btn-primary:hover{
     background-color: #0f4c75;
     border-color: #0f4c75;
