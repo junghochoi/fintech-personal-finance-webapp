@@ -29,6 +29,9 @@
     grid-row: 3/4;
     grid-column: 2/5;
 }
+.blurb a{
+    font-size: 2rem;
+}
 
 .get-started{
     grid-row: 4/5;
