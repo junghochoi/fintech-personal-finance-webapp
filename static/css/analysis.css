@@ -5,3 +5,29 @@
 .categories-charts{
     background-color: white;
 }
+.container-ana {
+    margin-top: 75px;
+}
+
+.chart-head {
+    margin-bottom: 20px;
+}
+
+#open-btn {
+    font-size: 18px;
+    margin: 30px 0px 30px 0px;
+    text-align: center;
+    justify-content: center;
+}
+
+.submit-btn {
+    margin-bottom: 30px;
+}
+
+.trans-card {
+    margin-bottom: 30px;
+}
+
+.t-notes {
+    margin-top: 5px;
+}

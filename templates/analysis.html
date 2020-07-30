@@ -1,33 +1,45 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container fixed-navbar-spacing analysis-page">
-    <h1>Transactions</h1>
-    <div class="container">
-    <div class="row">
-        <div class="col-12">
+<div class="container fixed-navbar-spacing">
+<div class="container-ana">
+	<div class="row">
+		<div class="col-12">
             <div class="card text-center">
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="overview" href="#" onclick="loadOverview()">Overview</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="2" onclick="load2()">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="3" onclick="load3()">Link</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="overview" href="#" onclick="loadOverview()">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="inc-exp" onclick="load2()">Income vs. Expenses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="exp" onclick="load3()">Expenses Breakdown</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="charts" id="overview-chart">    
-                        <h3>Overview</h3>
+                        <h3 class="chart-head">Overview</h3>
                         <canvas id="income-chart"></canvas>
                     </div>
                     <div class="charts hidden" id="2-chart">  
-                        <h3>Income vs Expense</h3>  
+                        <h3 class="chart-head">Income vs. Expenses</h3>  
                         <canvas id="income-expense-chart"></canvas>
+                    </div>
+                    <div class="charts hidden" id="3-chart">  
+                        <h3 class="chart-head">Expenses Breakdown</h3>  
+                        <div class="row">
+                            <div class="col-6">
+                                <canvas class="exp-chart" id="categories-barchart"></canvas>
+                            </div>
+
+                            <div class="col-6">
+                                <canvas class="exp-chart" id="categories-piechart"></canvas>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,13 +52,13 @@
         <div class="col-6">
 
             <!-- Div of cards -->
-            <input type="button" class="btn btn-primary" id="open-btn" onclick="toggleForm()" value="+"></input>
+            <input type="button" class="btn btn-primary" id="open-btn" onclick="toggleForm()" value="+ Log Transaction"></input>
             
             <div class="hidden" id="transaction-form">
-                <form method="POST" action="/transactions/add-transaction">
+                <form class="trans-form" method="POST" action="/transactions/add-transaction">
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" name="trans-title" value="" placeholder="Title" class="form-control"></input>
+                            <input type="text" name="trans-title" value="" placeholder="Title" class="form-title form-control"></input>
                         </div>
                         <div class="col-4">
                             <input type="number" name="trans-amount" value="" placeholder="$0.00" step="0.01" class="form-control"></input>
@@ -76,7 +88,7 @@
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" type="text" name="trans-message" value="" placeholder="Notes..." class="form-control"></textarea>
                         </div>
                         <div class="col-5">
-                            <input type="submit" value="Submit" class="btn btn-primary">
+                            <input type="submit" value="Submit" class="submit-btn btn btn-primary">
                         </div>
                     </div>
                 </form>
@@ -103,7 +115,7 @@
 
             {% for transaction in transactions %}
             {% set currentDate = ((transaction.date)|string).split(' ') %}
-            <div class="card">
+            <div class="card trans-card">
                 <div class="card-header">
                     {{ currentDate[0] }} 
                 </div>
@@ -115,7 +127,7 @@
                         <h3 class="card-title" style="color: green">+${{ transaction.amount }}</h3>
                     {% endif %}
                     <h5 class="card-title">{{ transaction.title }}</h5>
-                    <p class="card-text">{{ transaction.notes }}</p>
+                    <p class="card-text t-notes">{{ transaction.notes }}</p>
                 </div>
             </div>
             {% endfor %}
@@ -148,12 +160,13 @@
     <script>
         function toggleForm() {
             let btnValue = $("#open-btn").val();
-            if (btnValue == "+") {
+            if (btnValue == "+ Log Transaction") {
                 $("#transaction-form").removeClass("hidden").addClass("visible");
-                $("#open-btn").val("^");
+                $("#open-btn").val("^ Cancel");
             } else {
                 $("#transaction-form").removeClass("visible").addClass("hidden");
-                $("#open-btn").val("+");
+                $("#open-btn").val("+ Log Transaction");
+
             }
             
         }
@@ -170,14 +183,14 @@
             $('.nav-link').removeClass("active");
             $('.charts').removeClass("visible").addClass("hidden");
             $('#2-chart').removeClass("hidden").addClass("visible");
-            $('#2').addClass("active");
+            $('#inc-exp').addClass("active");
         }
 
         function load3() {
             $('.nav-link').removeClass("active");
             $('.charts').removeClass("visible").addClass("hidden");
             $('#3-chart').removeClass("hidden").addClass("visible");
-            $('#3').addClass("active");
+            $('#exp').addClass("active");
         }
     </script>
 
