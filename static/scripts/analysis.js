@@ -21,6 +21,7 @@ balancesChartSetup = (transactions) =>{
 
     config = {
         responsive: true,
+
         tooltips: {
             titleFontSize: 14,
             titleSpacing: 4,
@@ -94,6 +95,9 @@ categoriesChartSetup = (data) =>{
 
 
     barOptions = {
+        legend:{
+            display: false
+        },
         title:{
             display: true,
             text: 'Total Expenses'
@@ -161,6 +165,7 @@ incomeExpenseChartSetup = (data)=> {
     
 
     barData = {
+        
         labels: categories,
         datasets:[{
             
@@ -183,6 +188,9 @@ incomeExpenseChartSetup = (data)=> {
 
 
     barOptions = {
+        legend:{
+            display: false
+        },
         title:{
             display: true,
             text: 'Income vs. Expenses'
